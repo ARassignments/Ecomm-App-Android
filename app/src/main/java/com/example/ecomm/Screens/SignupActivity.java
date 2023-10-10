@@ -4,9 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Dialog;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -16,7 +13,6 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,52 +25,52 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
-public class LoginActivity extends AppCompatActivity {
+import java.util.HashMap;
+
+public class SignupActivity extends AppCompatActivity {
 
     ImageView backBtn;
-    TextInputLayout  emailLayout, passwordLayout;
-    TextInputEditText  emailEditText, passwordEditText;
+    TextInputLayout nameLayout, emailLayout, passwordLayout, cpasswordLayout;
+    TextInputEditText nameEditText, emailEditText, passwordEditText, cpasswordEditText;
     Button submitBtn;
-    TextView signupBtn, forgotBtn;
-    CheckBox rememberMe;
+    TextView loginBtn;
+
     FirebaseAuth myAuth = FirebaseAuth.getInstance();
-    SharedPreferences sharedPreferences;
-    SharedPreferences.Editor editor;
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     DatabaseReference db = firebaseDatabase.getReference();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-
-        sharedPreferences = getSharedPreferences("myData",MODE_PRIVATE);
-        editor = sharedPreferences.edit();
-        signupBtn = findViewById(R.id.signupBtn);
+        setContentView(R.layout.activity_signup);
         backBtn = findViewById(R.id.backBtn);
+        nameLayout = findViewById(R.id.nameLayout);
         emailLayout = findViewById(R.id.emailLayout);
         passwordLayout = findViewById(R.id.passwordLayout);
+        cpasswordLayout = findViewById(R.id.cpasswordLayout);
+        nameEditText = findViewById(R.id.nameEditText);
         emailEditText = findViewById(R.id.emailEditText);
         passwordEditText = findViewById(R.id.passwordEditText);
+        cpasswordEditText = findViewById(R.id.cpasswordEditText);
         submitBtn = findViewById(R.id.submitBtn);
-        rememberMe = findViewById(R.id.rememberMe);
-        forgotBtn = findViewById(R.id.forgotBtn);
+        loginBtn = findViewById(R.id.loginBtn);
+
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LoginActivity.super.onBackPressed();
+                SignupActivity.super.onBackPressed();
             }
         });
 
-        if(!sharedPreferences.getString("loginStatus","").isEmpty()){
-            startActivity(new Intent(LoginActivity.this, DashboardActivity.class));
-            finish();
-        }
+        loginBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SignupActivity.super.onBackPressed();
+            }
+        });
+
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -82,6 +78,22 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        nameEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                nameValidation();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
         emailEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -114,12 +126,36 @@ public class LoginActivity extends AppCompatActivity {
 
             }
         });
-        signupBtn.setOnClickListener(new View.OnClickListener() {
+        cpasswordEditText.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onClick(View v) {
-                startActivity(new Intent(LoginActivity.this,SignupActivity.class));
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                cPasswordValidation();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
             }
         });
+    }
+
+    public boolean nameValidation(){
+        String input = nameEditText.getText().toString().trim();
+        if(input.equals("")){
+            nameLayout.setError("Name is Required!!!");
+            return false;
+        } else if(input.length() < 3){
+            nameLayout.setError("Name at least 3 characters!!!");
+            return false;
+        } else {
+            nameLayout.setError(null);
+            return true;
+        }
     }
 
     public boolean emailValidation(){
@@ -151,12 +187,32 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    public boolean cPasswordValidation(){
+        String input = cpasswordEditText.getText().toString().trim();
+        String input2 = passwordEditText.getText().toString().trim();
+        if(input.equals("")){
+            cpasswordLayout.setError("Confirm Password is Required!!!");
+            return false;
+        } else if(input.length() < 8){
+            cpasswordLayout.setError("Confirm Password at least 8 characters!!!");
+            return false;
+        } else if(!input.equals(input2)) {
+            cpasswordLayout.setError("Confirm Password is not matched!!!");
+            return false;
+        } else {
+            cpasswordLayout.setError(null);
+            return true;
+        }
+    }
+
     public void validation(){
-        boolean emailErr = false, passwordErr = false;
+        boolean nameErr = false, emailErr = false, passwordErr = false, cpasswordErr = false;
+        nameErr = nameValidation();
         emailErr = emailValidation();
         passwordErr = passwordValidation();
-        if((emailErr && passwordErr ) == true){
-            Dialog loaddialog = new Dialog(LoginActivity.this);
+        cpasswordErr = cPasswordValidation();
+        if((nameErr && emailErr && passwordErr && cpasswordErr) == true){
+            Dialog loaddialog = new Dialog(SignupActivity.this);
             loaddialog.setContentView(R.layout.dialo_loading);
             loaddialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
             loaddialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
@@ -164,71 +220,49 @@ public class LoginActivity extends AppCompatActivity {
             loaddialog.setCancelable(false);
             loaddialog.setCanceledOnTouchOutside(false);
             TextView message = loaddialog.findViewById(R.id.message);
-            message.setText("Login...");
+            message.setText("Creating...");
             loaddialog.show();
-            // Login Here
-            myAuth.signInWithEmailAndPassword(emailEditText.getText().toString().trim(),passwordEditText.getText().toString().trim())
+            // Signup Here
+            myAuth.createUserWithEmailAndPassword(emailEditText.getText().toString().trim(),passwordEditText.getText().toString().trim())
                     .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                         @Override
                         public void onSuccess(AuthResult authResult) {
                             loaddialog.dismiss();
-                            Dialog alertdialog = new Dialog(LoginActivity.this);
+                            Dialog alertdialog = new Dialog(SignupActivity.this);
                             alertdialog.setContentView(R.layout.dialog_success);
                             alertdialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-                            alertdialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                            alertdialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
                             alertdialog.getWindow().setGravity(Gravity.CENTER);
                             alertdialog.setCancelable(false);
                             alertdialog.setCanceledOnTouchOutside(false);
-                            TextView message = alertdialog.findViewById(R.id.message);
-                            message.setText("Login Successfully!!!");
+                            alertdialog.show();
 
                             FirebaseUser user = myAuth.getCurrentUser();
 
-                            db.child("Users").child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                            HashMap<String,String> obj = new HashMap<String,String>();
+                            obj.put("name",nameEditText.getText().toString().trim());
+                            obj.put("email",emailEditText.getText().toString().trim());
+                            obj.put("role","user");
+                            obj.put("status","1");
+
+                            db.child("Users").child(user.getUid()).setValue(obj);
+
+                            new Handler().postDelayed(new Runnable() {
                                 @Override
-                                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                    if(snapshot.exists()){
-                                        String role = snapshot.child("role").getValue().toString().trim();
-                                        String status = snapshot.child("status").getValue().toString().trim();
-                                        if(status.equals("1")){
-                                            alertdialog.show();
-                                            if(rememberMe.isChecked()){
-                                                editor.putString("loginStatus","true");
-                                                editor.commit();
-                                            }
-
-                                            editor.putString("role",role);
-                                            editor.putString("status",status);
-                                            editor.commit();
-
-                                            new Handler().postDelayed(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    alertdialog.dismiss();
-                                                    startActivity(new Intent(LoginActivity.this, DashboardActivity.class));
-                                                    finish();
-                                                }
-                                            },3000);
-                                        } else if(status.equals("0")){
-                                            Toast.makeText(LoginActivity.this, "Your Account is Suspended By Admin!!!", Toast.LENGTH_SHORT).show();
-                                        }
-                                    }
+                                public void run() {
+                                    alertdialog.dismiss();
+                                    SignupActivity.super.onBackPressed();
                                 }
+                            },2000);
 
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError error) {
-
-                                }
-                            });
-
-
+//                            SignupActivity.super.onBackPressed();
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             loaddialog.dismiss();
-                            Dialog alertdialog = new Dialog(LoginActivity.this);
+                            Dialog alertdialog = new Dialog(SignupActivity.this);
                             alertdialog.setContentView(R.layout.dialog_error);
                             alertdialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
                             alertdialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
@@ -236,7 +270,7 @@ public class LoginActivity extends AppCompatActivity {
                             alertdialog.setCancelable(false);
                             alertdialog.setCanceledOnTouchOutside(false);
                             TextView message = alertdialog.findViewById(R.id.message);
-                            message.setText("Email Address OR Password is wrong!!!");
+                            message.setText("Your is Already Exist!!!");
                             alertdialog.show();
 
                             new Handler().postDelayed(new Runnable() {
@@ -249,5 +283,4 @@ public class LoginActivity extends AppCompatActivity {
                     });
         }
     }
-
 }

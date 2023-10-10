@@ -4,4 +4,5 @@
     <color name="white">#FFFFFFFF</color>
     <color name="myTheme">#08C970</color>
     <color name="myThemeLight">#40F3A0</color>
+    <color name="textColor">#212121</color>
 </resources>
