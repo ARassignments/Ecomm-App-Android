@@ -22,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ecomm.R;
+import com.example.ecomm.Screens.Admin.AdminDashboardActivity;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputEditText;
@@ -197,6 +198,7 @@ public class LoginActivity extends AppCompatActivity {
                                                 editor.commit();
                                             }
 
+                                            editor.putString("userId",user.getUid());
                                             editor.putString("role",role);
                                             editor.putString("status",status);
                                             editor.commit();
@@ -205,8 +207,14 @@ public class LoginActivity extends AppCompatActivity {
                                                 @Override
                                                 public void run() {
                                                     alertdialog.dismiss();
-                                                    startActivity(new Intent(LoginActivity.this, DashboardActivity.class));
-                                                    finish();
+                                                    if(role.equals("user")){
+                                                        startActivity(new Intent(LoginActivity.this, DashboardActivity.class));
+                                                        finish();
+                                                    } else if(role.equals("admin")){
+                                                        startActivity(new Intent(LoginActivity.this, AdminDashboardActivity.class));
+                                                        finish();
+                                                    }
+
                                                 }
                                             },3000);
                                         } else if(status.equals("0")){
