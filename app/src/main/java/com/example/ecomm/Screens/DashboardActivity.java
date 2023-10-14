@@ -6,12 +6,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.renderscript.ScriptGroup;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.ecomm.R;
 import com.example.ecomm.Screens.Admin.AdminDashboardActivity;
+import com.example.ecomm.databinding.ActivityDashboardBinding;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -29,6 +31,7 @@ public class DashboardActivity extends AppCompatActivity {
     DatabaseReference db = firebaseDatabase.getReference();
     String userId;
     TextView roleTextView, nameTextView;
+    ActivityDashboardBinding binding;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +41,9 @@ public class DashboardActivity extends AppCompatActivity {
         logout = findViewById(R.id.logout);
         roleTextView = findViewById(R.id.roleTextView);
         nameTextView = findViewById(R.id.nameTextView);
+
+        binding = ActivityDashboardBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         userId = preferences.getString("userId",null);
         db.child("Users").child(userId).addValueEventListener(new ValueEventListener() {
