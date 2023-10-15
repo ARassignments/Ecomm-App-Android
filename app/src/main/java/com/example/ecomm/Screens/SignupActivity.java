@@ -12,6 +12,7 @@ import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -29,6 +30,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.HashMap;
+import java.util.regex.Pattern;
 
 public class SignupActivity extends AppCompatActivity {
 
@@ -45,6 +47,8 @@ public class SignupActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         backBtn = findViewById(R.id.backBtn);
         nameLayout = findViewById(R.id.nameLayout);
         emailLayout = findViewById(R.id.emailLayout);
@@ -148,6 +152,9 @@ public class SignupActivity extends AppCompatActivity {
         String input = nameEditText.getText().toString().trim();
         if(input.equals("")){
             nameLayout.setError("Name is Required!!!");
+            return false;
+        } else if(!Pattern.compile("^[a-zA-Z\\s]*$").matcher(input).matches()){
+            nameLayout.setError("Name In Only Text!!!");
             return false;
         } else if(input.length() < 3){
             nameLayout.setError("Name at least 3 characters!!!");

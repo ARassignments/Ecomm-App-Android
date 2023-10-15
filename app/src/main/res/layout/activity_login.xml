@@ -82,7 +82,7 @@
         android:id="@+id/passwordLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:startIconDrawable="@drawable/password"
+        app:startIconDrawable="@drawable/lock"
         app:startIconTint="@color/textColor"
         app:hintEnabled="true"
         android:hint="Enter Password"
@@ -133,17 +133,10 @@
 
     <Button
         android:id="@+id/submitBtn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:text="Sign in"
-        android:background="@drawable/button_shape"
-        android:textStyle="bold"
-        android:fontFamily="@font/poppins_regular"
-        android:textColor="@color/white"
-        android:textSize="16sp"
         android:layout_marginTop="40dp"
-        android:textAllCaps="false"
-        android:layout_marginBottom="20dp"/>
+        android:layout_marginBottom="20dp"
+        style="@style/EcommButton"/>
 
     <LinearLayout
         android:layout_width="match_parent"

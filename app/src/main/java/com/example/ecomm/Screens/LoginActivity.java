@@ -15,6 +15,7 @@ import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
@@ -53,6 +54,8 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         sharedPreferences = getSharedPreferences("myData",MODE_PRIVATE);
         editor = sharedPreferences.edit();
@@ -161,6 +164,7 @@ public class LoginActivity extends AppCompatActivity {
             loaddialog.setContentView(R.layout.dialo_loading);
             loaddialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
             loaddialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+            loaddialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
             loaddialog.getWindow().setGravity(Gravity.CENTER);
             loaddialog.setCancelable(false);
             loaddialog.setCanceledOnTouchOutside(false);
@@ -177,6 +181,7 @@ public class LoginActivity extends AppCompatActivity {
                             alertdialog.setContentView(R.layout.dialog_success);
                             alertdialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
                             alertdialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                            alertdialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
                             alertdialog.getWindow().setGravity(Gravity.CENTER);
                             alertdialog.setCancelable(false);
                             alertdialog.setCanceledOnTouchOutside(false);
@@ -240,6 +245,7 @@ public class LoginActivity extends AppCompatActivity {
                             alertdialog.setContentView(R.layout.dialog_error);
                             alertdialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
                             alertdialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                            alertdialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
                             alertdialog.getWindow().setGravity(Gravity.CENTER);
                             alertdialog.setCancelable(false);
                             alertdialog.setCanceledOnTouchOutside(false);
