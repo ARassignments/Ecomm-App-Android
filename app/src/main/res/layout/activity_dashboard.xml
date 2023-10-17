@@ -23,7 +23,7 @@
             android:layout_height="wrap_content"
             android:text="comm"
             android:fontFamily="@font/urbanist_bold"
-            android:textSize="38sp"
+            android:textSize="33sp"
             android:textColor="@color/textColor"
             android:translationX="-15dp"
             android:layout_weight="1"/>
@@ -80,4 +80,10 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"/>
 
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:menu="@menu/bottom_menu"
+        app:backgroundTint="@color/white"/>
 </LinearLayout>
