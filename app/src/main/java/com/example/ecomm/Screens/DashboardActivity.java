@@ -81,8 +81,8 @@ public class DashboardActivity extends AppCompatActivity {
                 if(snapshot.exists()){
                     String roleCheck = snapshot.child("role").getValue().toString().trim();
                     if(roleCheck.equals("admin")){
-                        startActivity(new Intent(DashboardActivity.this, AdminDashboardActivity.class));
-                        finish();
+//                        startActivity(new Intent(DashboardActivity.this, AdminDashboardActivity.class));
+//                        finish();
                     }
                 }
             }

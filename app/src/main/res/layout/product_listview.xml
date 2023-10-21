@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent">
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="130dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/product_card_bg">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/testimg"
+            android:scaleType="fitCenter"/>
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/heart_outlined"
+            android:layout_gravity="top|right"
+            android:layout_margin="15dp"
+            app:tint="@color/myTheme" />
+
+    </FrameLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Sansevieria Trifasci..."
+        android:fontFamily="@font/urbanist_bold"
+        android:textColor="@color/textColor"
+        android:textSize="18dp"
+        android:layout_marginVertical="5dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:src="@drawable/rating_star"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="4.5 |"
+            android:textColor="#616161"
+            android:paddingLeft="5dp"
+            android:paddingRight="8dp"
+            android:fontFamily="@font/urbanist_medium"
+            android:textSize="13dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="23 Stock"
+            android:background="@drawable/product_stock_bg"
+            android:textColor="@color/myTheme"
+            android:paddingVertical="5dp"
+            android:paddingHorizontal="10dp"
+            android:fontFamily="@font/urbanist_semibold"
+            android:textSize="12dp"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="$23"
+        android:fontFamily="@font/urbanist_bold"
+        android:textColor="@color/myTheme"
+        android:textSize="18dp"
+        android:layout_marginVertical="5dp"/>
+
+</LinearLayout>

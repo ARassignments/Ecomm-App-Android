@@ -18,6 +18,7 @@ import com.example.ecomm.R;
 import com.example.ecomm.Screens.Admin.AdminDashboardActivity;
 import com.example.ecomm.Screens.DashboardActivity;
 import com.example.ecomm.Screens.LoginActivity;
+import com.example.ecomm.Screens.ProductsActivity;
 import com.example.ecomm.databinding.FragmentHomeBinding;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -57,6 +58,13 @@ public class HomeFragment extends Fragment {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
+            }
+        });
+
+        binding.productsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(inflater.getContext(), ProductsActivity.class));
             }
         });
 

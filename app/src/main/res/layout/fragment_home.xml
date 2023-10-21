@@ -78,6 +78,12 @@
 
         </LinearLayout>
 
+        <Button
+            android:id="@+id/productsBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Products"/>
+
     </LinearLayout>
 
 </ScrollView>
