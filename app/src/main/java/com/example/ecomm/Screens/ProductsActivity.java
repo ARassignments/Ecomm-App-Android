@@ -62,8 +62,6 @@ public class ProductsActivity extends AppCompatActivity {
                 loaddialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
                 loaddialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
                 loaddialog.getWindow().setGravity(Gravity.CENTER);
-                loaddialog.setCancelable(false);
-                loaddialog.setCanceledOnTouchOutside(false);
                 loaddialog.show();
             }
         });
