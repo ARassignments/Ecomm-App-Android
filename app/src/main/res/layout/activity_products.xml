@@ -67,6 +67,7 @@
         android:layout_margin="20dp"
         android:src="@drawable/add"
         android:tint="@color/white"
-        android:backgroundTint="@color/myTheme"/>
+        android:backgroundTint="@color/myTheme"
+        tools:ignore="ContentDescription" />
 
 </FrameLayout>

@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Dialog;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -17,17 +18,23 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Patterns;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.webkit.MimeTypeMap;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.ecomm.MainActivity;
 import com.example.ecomm.R;
+import com.example.ecomm.Screens.Models.ProductModel;
 import com.example.ecomm.databinding.ActivityProductsBinding;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -41,6 +48,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.regex.Pattern;
 
@@ -52,17 +60,18 @@ public class ProductsActivity extends AppCompatActivity {
     SharedPreferences preferences;
     SharedPreferences.Editor editor;
     String userId;
-    FirebaseStorage storage;
     StorageReference mStorage;
     StorageTask uploadTask;
     Uri imageUri;
+
+    ArrayList<ProductModel> datalist = new ArrayList<>();
 
     // Dialog Components
     Dialog loaddialog;
     CircleImageView image;
     ImageButton imageadd;
-    TextInputLayout pName, pDescription, pPrice, pStock;
-    TextInputEditText pNameEditText, pDescriptionEditText, pPriceEditText, pStockEditText;
+    TextInputLayout pName, pDescription, pPrice, pStock, pDiscount;
+    TextInputEditText pNameEditText, pDescriptionEditText, pPriceEditText, pStockEditText, pDiscountEditText;
     Button cancelBtn, saveChangesBtn;
     TextView imageErrTextView;
     @Override
@@ -96,6 +105,13 @@ public class ProductsActivity extends AppCompatActivity {
             }
         });
 
+        binding.backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ProductsActivity.super.onBackPressed();
+            }
+        });
+
         binding.addProductBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -113,10 +129,12 @@ public class ProductsActivity extends AppCompatActivity {
                 pDescription = loaddialog.findViewById(R.id.pDescription);
                 pPrice = loaddialog.findViewById(R.id.pPrice);
                 pStock = loaddialog.findViewById(R.id.pStock);
+                pDiscount = loaddialog.findViewById(R.id.pDiscount);
                 pNameEditText = loaddialog.findViewById(R.id.pNameEditText);
                 pDescriptionEditText = loaddialog.findViewById(R.id.pDescriptionEditText);
                 pPriceEditText = loaddialog.findViewById(R.id.pPriceEditText);
                 pStockEditText = loaddialog.findViewById(R.id.pStockEditText);
+                pDiscountEditText = loaddialog.findViewById(R.id.pDiscountEditText);
                 cancelBtn = loaddialog.findViewById(R.id.cancelBtn);
                 saveChangesBtn = loaddialog.findViewById(R.id.saveChangesBtn);
                 imageErrTextView = loaddialog.findViewById(R.id.imageErrTextView);
@@ -209,11 +227,54 @@ public class ProductsActivity extends AppCompatActivity {
 
                     }
                 });
+                pDiscountEditText.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                        pdiscountValidation();
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable editable) {
+
+                    }
+                });
                 loaddialog.show();
             }
         });
 
 
+        MainActivity.myRef.child("Products").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists()){
+                    datalist.clear();
+                    for (DataSnapshot ds: snapshot.getChildren()){
+                        ProductModel model = new ProductModel(ds.getKey(),
+                                ds.child("pName").getValue().toString(),
+                                ds.child("pPrice").getValue().toString(),
+                                ds.child("pStock").getValue().toString(),
+                                ds.child("pDiscount").getValue().toString(),
+                                ds.child("pImage").getValue().toString(),
+                                ds.child("pDesc").getValue().toString(),
+                                ds.child("status").getValue().toString()
+                        );
+                        datalist.add(model);
+                    }
+                    MyAdapter adapter = new MyAdapter(ProductsActivity.this,datalist);
+                    binding.gridView.setAdapter(adapter);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
     }
 
@@ -260,6 +321,16 @@ public class ProductsActivity extends AppCompatActivity {
             return true;
         }
     }
+    public boolean pdiscountValidation(){
+        String contact = pDiscountEditText.getText().toString().trim();
+        if(contact.isEmpty()){
+            pDiscount.setError("Discount is Required!!!");
+            return false;
+        } else {
+            pDiscount.setError(null);
+            return true;
+        }
+    }
     public boolean imageValidation(){
         if(imageUri == null){
             imageErrTextView.setText("Product Image is Required!!!");
@@ -285,17 +356,18 @@ public class ProductsActivity extends AppCompatActivity {
         return mimeTypeMap.getExtensionFromMimeType(cr.getType(uri));
     }
     private void validation(String imageStatus) {
-        boolean imageErr = false, pnameErr = false, pdescErr = false, ppriceErr = false, pstockErr = false;
+        boolean imageErr = false, pnameErr = false, pdescErr = false, ppriceErr = false, pstockErr = false, pdiscountErr = false;
         pnameErr = pnameValidation();
         pdescErr = pdescValidation();
         ppriceErr = ppriceValidation();
         pstockErr = pstockValidation();
+        pdiscountErr = pdiscountValidation();
         if(imageStatus.equals("true")){
             imageErr = true;
         } else {
             imageErr = imageValidation();
         }
-        if((pnameErr && pdescErr && ppriceErr && pstockErr && imageErr) == true){
+        if((pnameErr && pdescErr && ppriceErr && pstockErr && pdiscountErr && imageErr) == true){
             product();
         }
     }
@@ -328,6 +400,7 @@ public class ProductsActivity extends AppCompatActivity {
                             mydata.put("pDesc", pDescriptionEditText.getText().toString().trim());
                             mydata.put("pStock", pStockEditText.getText().toString().trim());
                             mydata.put("pPrice", pPriceEditText.getText().toString().trim());
+                            mydata.put("pDiscount", pDiscountEditText.getText().toString().trim());
                             mydata.put("status", "1");
                             MainActivity.myRef.child("Products").push().setValue(mydata);
 
@@ -359,4 +432,67 @@ public class ProductsActivity extends AppCompatActivity {
 
     }
 
+    public class MyAdapter extends BaseAdapter{
+
+        Context context;
+        ArrayList<ProductModel> data;
+
+        public MyAdapter(Context context, ArrayList<ProductModel> data) {
+            this.context = context;
+            this.data = data;
+        }
+
+        @Override
+        public int getCount() {
+            // Count of Adapter
+            return data.size();
+        }
+
+        @Override
+        public Object getItem(int i) {
+            return null;
+        }
+
+        @Override
+        public long getItemId(int i) {
+            return 0;
+        }
+
+        @Override
+        public View getView(int i, View view, ViewGroup viewGroup) {
+            // Declare Product Layout
+            View productItem = LayoutInflater.from(context).inflate(R.layout.product_listview,null);
+            ImageView pImage, wishlistBtn, editBtn, deleteBtn;
+            TextView pDiscount, pName, pRating, pStock, pPrice, pPriceOff;
+            LinearLayout options, item;
+            pImage = productItem.findViewById(R.id.pImage);
+            wishlistBtn = productItem.findViewById(R.id.wishlistBtn);
+            editBtn = productItem.findViewById(R.id.editBtn);
+            deleteBtn = productItem.findViewById(R.id.deleteBtn);
+            pDiscount = productItem.findViewById(R.id.pDiscount);
+            pName = productItem.findViewById(R.id.pName);
+            pRating = productItem.findViewById(R.id.pRating);
+            pStock = productItem.findViewById(R.id.pStock);
+            pPrice = productItem.findViewById(R.id.pPrice);
+            pPriceOff = productItem.findViewById(R.id.pPriceOff);
+            options = productItem.findViewById(R.id.options);
+            item = productItem.findViewById(R.id.item);
+
+            if(!data.get(i).getpDiscount().equals("0")){
+                pDiscount.setVisibility(View.VISIBLE);
+                pDiscount.setText(data.get(i).getpDiscount()+"% OFF");
+            }
+            pName.setText(data.get(i).getpName());
+            pStock.setText(data.get(i).getpStock()+" Stock");
+            pPriceOff.setText("$"+data.get(i).getpPrice());
+            Glide.with(context).load(data.get(i).getpImage()).into(pImage);
+
+            double discount = Double.parseDouble(data.get(i).getpDiscount())/100;
+            double calcDiscount = Double.parseDouble(data.get(i).getpPrice()) * discount;
+            double totalPrice = Double.parseDouble(data.get(i).getpPrice()) - calcDiscount;
+            pPrice.setText("$"+Math.round(totalPrice));
+
+            return productItem;
+        }
+    }
 }
