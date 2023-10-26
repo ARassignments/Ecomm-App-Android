@@ -79,6 +79,12 @@ public class HomeFragment extends Fragment {
                 getActivity().finish();
             }
         });
+        binding.searchBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
         return binding.getRoot();
     }
 }

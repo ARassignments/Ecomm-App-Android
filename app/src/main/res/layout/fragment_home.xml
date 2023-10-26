@@ -78,6 +78,41 @@
 
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/searchBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@drawable/search_bg"
+            android:layout_marginHorizontal="20dp"
+            android:padding="15dp"
+            android:gravity="center"
+            android:layout_marginTop="10dp">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/search"
+                app:tint="#A6A6A6" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Search Here"
+                android:layout_marginHorizontal="10dp"
+                android:textSize="14sp"
+                android:textColor="#BDBDBD"
+                android:fontFamily="@font/urbanist_regular"/>
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/filter"
+                app:tint="@color/myTheme" />
+
+        </LinearLayout>
+
         <Button
             android:id="@+id/productsBtn"
             android:layout_width="wrap_content"

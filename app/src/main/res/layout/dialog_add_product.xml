@@ -23,7 +23,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textAlignment="center"
-                android:text="Add Plant"
+                android:text="Add Product"
                 android:fontFamily="@font/urbanist_bold"
                 android:textSize="25sp"
                 android:textColor="@color/myTheme"/>
@@ -135,6 +135,31 @@
                     android:layout_height="wrap_content"
                     android:inputType="number"
                     android:maxLength="8"
+                    />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/pDiscount"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Enter Price Discount"
+                app:counterEnabled="true"
+                app:counterMaxLength="2"
+                app:endIconMode="clear_text"
+                app:errorEnabled="true"
+                app:suffixText="%"
+                app:helperText="Only Number Allowed!!!"
+                app:startIconDrawable="@drawable/discount"
+                app:startIconTint="@color/myTheme">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/pDiscountEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:maxLength="2"
                     />
 
             </com.google.android.material.textfield.TextInputLayout>

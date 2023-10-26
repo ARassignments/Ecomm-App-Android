@@ -11,12 +11,14 @@
         android:background="@drawable/product_card_bg">
 
         <ImageView
+            android:id="@+id/pImage"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:src="@drawable/testimg"
             android:scaleType="fitCenter"/>
 
         <ImageView
+            android:id="@+id/wishlistBtn"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:src="@drawable/heart_outlined"
@@ -24,15 +26,60 @@
             android:layout_margin="15dp"
             app:tint="@color/myTheme" />
 
+        <TextView
+            android:id="@+id/pDiscount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="50% OFF"
+            android:layout_margin="10dp"
+            android:background="@drawable/pill_shape"
+            android:backgroundTint="#CD2E2E"
+            android:textColor="@color/white"
+            android:paddingVertical="5dp"
+            android:paddingHorizontal="10dp"
+            android:fontFamily="@font/urbanist_bold"
+            android:alpha="0.8"
+            android:textSize="10dp"/>
+
+        <LinearLayout
+            android:id="@+id/options"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="bottom|right"
+            android:alpha="0.6"
+            android:layout_margin="15dp">
+
+            <ImageView
+                android:id="@+id/editBtn"
+                android:layout_width="20dp"
+                android:layout_height="22dp"
+                android:src="@drawable/edit"
+                app:tint="#416AE4"
+                android:layout_marginBottom="5dp"/>
+
+            <ImageView
+                android:id="@+id/deleteBtn"
+                android:layout_width="20dp"
+                android:layout_height="22dp"
+                android:src="@drawable/delete"
+                app:tint="#E64747" />
+
+        </LinearLayout>
+
     </FrameLayout>
+
     <TextView
+        android:id="@+id/pName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Sansevieria Trifasci..."
+        android:layout_marginVertical="5dp"
         android:fontFamily="@font/urbanist_bold"
+        android:text="Sansevieria Trifasci..."
         android:textColor="@color/textColor"
         android:textSize="18dp"
-        android:layout_marginVertical="5dp"/>
+        android:maxLines="1"
+        android:minLines="1"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -46,6 +93,7 @@
             android:src="@drawable/rating_star"/>
 
         <TextView
+            android:id="@+id/pRating"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="4.5 |"
@@ -56,6 +104,7 @@
             android:textSize="13dp"/>
 
         <TextView
+            android:id="@+id/pStock"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="23 Stock"
@@ -69,6 +118,7 @@
     </LinearLayout>
 
     <TextView
+        android:id="@+id/pPrice"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="$23"
