@@ -8,13 +8,18 @@ import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Patterns;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -64,6 +69,8 @@ public class ProductsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_products);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         binding = ActivityProductsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         preferences = getSharedPreferences("myData", MODE_PRIVATE);
@@ -98,6 +105,8 @@ public class ProductsActivity extends AppCompatActivity {
                 loaddialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
                 loaddialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
                 loaddialog.getWindow().setGravity(Gravity.CENTER);
+                loaddialog.setCancelable(false);
+                loaddialog.setCanceledOnTouchOutside(false);
                 image = loaddialog.findViewById(R.id.image);
                 imageadd = loaddialog.findViewById(R.id.imageadd);
                 pName = loaddialog.findViewById(R.id.pName);
@@ -130,7 +139,76 @@ public class ProductsActivity extends AppCompatActivity {
                         }
                     }
                 });
+                cancelBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        loaddialog.dismiss();
+                    }
+                });
+                pNameEditText.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        pnameValidation();
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+
+                    }
+                });
+                pDescriptionEditText.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        pdescValidation();
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+
+                    }
+                });
+                pPriceEditText.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        ppriceValidation();
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+
+                    }
+                });
+                pStockEditText.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        pstockValidation();
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+
+                    }
+                });
                 loaddialog.show();
             }
         });
@@ -207,18 +285,33 @@ public class ProductsActivity extends AppCompatActivity {
         return mimeTypeMap.getExtensionFromMimeType(cr.getType(uri));
     }
     private void validation(String imageStatus) {
-        boolean imageErr = false;
+        boolean imageErr = false, pnameErr = false, pdescErr = false, ppriceErr = false, pstockErr = false;
+        pnameErr = pnameValidation();
+        pdescErr = pdescValidation();
+        ppriceErr = ppriceValidation();
+        pstockErr = pstockValidation();
         if(imageStatus.equals("true")){
             imageErr = true;
         } else {
             imageErr = imageValidation();
         }
-        if((pnameValidation() && pdescValidation() && ppriceValidation() && pstockValidation() && imageErr) == true){
+        if((pnameErr && pdescErr && ppriceErr && pstockErr && imageErr) == true){
             product();
         }
     }
     private void product() {
         if(imageUri != null){
+            Dialog loading = new Dialog(ProductsActivity.this);
+            loading.setContentView(R.layout.dialo_loading);
+            loading.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+            loading.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+            loading.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+            loading.getWindow().setGravity(Gravity.CENTER);
+            loading.setCancelable(false);
+            loading.setCanceledOnTouchOutside(false);
+            TextView message = loading.findViewById(R.id.message);
+            message.setText("Creating...");
+            loading.show();
             uploadTask = mStorage.child("Images/"+System.currentTimeMillis()+"."+getFileExtension(imageUri)).putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -226,8 +319,8 @@ public class ProductsActivity extends AppCompatActivity {
                     task.addOnSuccessListener(new OnSuccessListener<Uri>() {
                         @Override
                         public void onSuccess(Uri uri) {
+                            loading.dismiss();
                             String photoLink = uri.toString();
-                            String uploadId = MainActivity.myRef.child("Plant").push().getKey();
 
                             HashMap<String, String> mydata = new HashMap<String, String>();
                             mydata.put("pImage", "" + photoLink);
@@ -236,8 +329,28 @@ public class ProductsActivity extends AppCompatActivity {
                             mydata.put("pStock", pStockEditText.getText().toString().trim());
                             mydata.put("pPrice", pPriceEditText.getText().toString().trim());
                             mydata.put("status", "1");
-                            MainActivity.myRef.child("Products").child(uploadId).setValue(mydata);
-                            loaddialog.dismiss();
+                            MainActivity.myRef.child("Products").push().setValue(mydata);
+
+                            Dialog alertdialog = new Dialog(ProductsActivity.this);
+                            alertdialog.setContentView(R.layout.dialog_success);
+                            alertdialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+                            alertdialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                            alertdialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+                            alertdialog.getWindow().setGravity(Gravity.CENTER);
+                            alertdialog.setCancelable(false);
+                            alertdialog.setCanceledOnTouchOutside(false);
+                            TextView message = alertdialog.findViewById(R.id.message);
+                            message.setText("Product Added Successfully!!!");
+                            alertdialog.show();
+
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    alertdialog.dismiss();
+                                    loaddialog.dismiss();
+                                }
+                            },2000);
+
                         }
                     });
                 }
