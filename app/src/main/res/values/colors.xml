@@ -5,4 +5,5 @@
     <color name="myTheme">#01B763</color>
     <color name="myThemeLight">#67D4A1</color>
     <color name="textColor">#212121</color>
+    <color name="transparent">#00FFFFFF</color>
 </resources>

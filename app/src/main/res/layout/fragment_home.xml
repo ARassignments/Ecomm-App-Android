@@ -106,8 +106,8 @@
                 android:fontFamily="@font/urbanist_regular"/>
 
             <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
                 android:src="@drawable/filter"
                 app:tint="@color/myTheme" />
 

@@ -49,6 +49,7 @@ import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.regex.Pattern;
 
@@ -115,135 +116,14 @@ public class ProductsActivity extends AppCompatActivity {
         binding.addProductBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                loaddialog = new Dialog(ProductsActivity.this);
-                loaddialog.setContentView(R.layout.dialog_add_product);
-                loaddialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-                loaddialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-                loaddialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-                loaddialog.getWindow().setGravity(Gravity.CENTER);
-                loaddialog.setCancelable(false);
-                loaddialog.setCanceledOnTouchOutside(false);
-                image = loaddialog.findViewById(R.id.image);
-                imageadd = loaddialog.findViewById(R.id.imageadd);
-                pName = loaddialog.findViewById(R.id.pName);
-                pDescription = loaddialog.findViewById(R.id.pDescription);
-                pPrice = loaddialog.findViewById(R.id.pPrice);
-                pStock = loaddialog.findViewById(R.id.pStock);
-                pDiscount = loaddialog.findViewById(R.id.pDiscount);
-                pNameEditText = loaddialog.findViewById(R.id.pNameEditText);
-                pDescriptionEditText = loaddialog.findViewById(R.id.pDescriptionEditText);
-                pPriceEditText = loaddialog.findViewById(R.id.pPriceEditText);
-                pStockEditText = loaddialog.findViewById(R.id.pStockEditText);
-                pDiscountEditText = loaddialog.findViewById(R.id.pDiscountEditText);
-                cancelBtn = loaddialog.findViewById(R.id.cancelBtn);
-                saveChangesBtn = loaddialog.findViewById(R.id.saveChangesBtn);
-                imageErrTextView = loaddialog.findViewById(R.id.imageErrTextView);
-                imageadd.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                        intent.addCategory(Intent.CATEGORY_OPENABLE);
-                        intent.setType("image/*");
-                        startActivityForResult(intent, 420);
-                    }
-                });
-                saveChangesBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if(uploadTask != null && uploadTask.isInProgress()){
-                            Toast.makeText(ProductsActivity.this, "Image Upload In Process!!!", Toast.LENGTH_SHORT).show();
-                        } else {
-                            validation("false");
-                        }
-                    }
-                });
-                cancelBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        loaddialog.dismiss();
-                    }
-                });
-                pNameEditText.addTextChangedListener(new TextWatcher() {
-                    @Override
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                productForm("add","");
+            }
+        });
 
-                    }
-
-                    @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-                        pnameValidation();
-                    }
-
-                    @Override
-                    public void afterTextChanged(Editable s) {
-
-                    }
-                });
-                pDescriptionEditText.addTextChangedListener(new TextWatcher() {
-                    @Override
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                    }
-
-                    @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-                        pdescValidation();
-                    }
-
-                    @Override
-                    public void afterTextChanged(Editable s) {
-
-                    }
-                });
-                pPriceEditText.addTextChangedListener(new TextWatcher() {
-                    @Override
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                    }
-
-                    @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-                        ppriceValidation();
-                    }
-
-                    @Override
-                    public void afterTextChanged(Editable s) {
-
-                    }
-                });
-                pStockEditText.addTextChangedListener(new TextWatcher() {
-                    @Override
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                    }
-
-                    @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-                        pstockValidation();
-                    }
-
-                    @Override
-                    public void afterTextChanged(Editable s) {
-
-                    }
-                });
-                pDiscountEditText.addTextChangedListener(new TextWatcher() {
-                    @Override
-                    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                    }
-
-                    @Override
-                    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                        pdiscountValidation();
-                    }
-
-                    @Override
-                    public void afterTextChanged(Editable editable) {
-
-                    }
-                });
-                loaddialog.show();
+        binding.search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(ProductsActivity.this, SearchActivity.class));
             }
         });
 
@@ -265,6 +145,7 @@ public class ProductsActivity extends AppCompatActivity {
                         );
                         datalist.add(model);
                     }
+                    Collections.reverse(datalist);
                     MyAdapter adapter = new MyAdapter(ProductsActivity.this,datalist);
                     binding.gridView.setAdapter(adapter);
                 }
@@ -276,6 +157,159 @@ public class ProductsActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    public void productForm(String purpose, String productId){
+        loaddialog = new Dialog(ProductsActivity.this);
+        loaddialog.setContentView(R.layout.dialog_add_product);
+        loaddialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        loaddialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        loaddialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+        loaddialog.getWindow().setGravity(Gravity.CENTER);
+        loaddialog.setCancelable(false);
+        loaddialog.setCanceledOnTouchOutside(false);
+        image = loaddialog.findViewById(R.id.image);
+        imageadd = loaddialog.findViewById(R.id.imageadd);
+        pName = loaddialog.findViewById(R.id.pName);
+        pDescription = loaddialog.findViewById(R.id.pDescription);
+        pPrice = loaddialog.findViewById(R.id.pPrice);
+        pStock = loaddialog.findViewById(R.id.pStock);
+        pDiscount = loaddialog.findViewById(R.id.pDiscount);
+        pNameEditText = loaddialog.findViewById(R.id.pNameEditText);
+        pDescriptionEditText = loaddialog.findViewById(R.id.pDescriptionEditText);
+        pPriceEditText = loaddialog.findViewById(R.id.pPriceEditText);
+        pStockEditText = loaddialog.findViewById(R.id.pStockEditText);
+        pDiscountEditText = loaddialog.findViewById(R.id.pDiscountEditText);
+        cancelBtn = loaddialog.findViewById(R.id.cancelBtn);
+        saveChangesBtn = loaddialog.findViewById(R.id.saveChangesBtn);
+        imageErrTextView = loaddialog.findViewById(R.id.imageErrTextView);
+        imageadd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                intent.setType("image/*");
+                startActivityForResult(intent, 420);
+            }
+        });
+        saveChangesBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(uploadTask != null && uploadTask.isInProgress()){
+                    Toast.makeText(ProductsActivity.this, "Image Upload In Process!!!", Toast.LENGTH_SHORT).show();
+                } else {
+                    validation("false",purpose, productId);
+                }
+            }
+        });
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loaddialog.dismiss();
+            }
+        });
+        pNameEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                pnameValidation();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        pDescriptionEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                pdescValidation();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        pPriceEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                ppriceValidation();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        pStockEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                pstockValidation();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        pDiscountEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                pdiscountValidation();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+        if(purpose.equals("edit")){
+            MainActivity.myRef.child("Products").child(productId).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if(snapshot.exists()){
+                        Glide.with(ProductsActivity.this).load(snapshot.child("pImage").getValue().toString().trim()).into(image);
+                        pNameEditText.setText(snapshot.child("pName").getValue().toString().trim());
+                        pDescriptionEditText.setText(snapshot.child("pDesc").getValue().toString().trim());
+                        pPriceEditText.setText(snapshot.child("pPrice").getValue().toString().trim());
+                        pStockEditText.setText(snapshot.child("pStock").getValue().toString().trim());
+                        pDiscountEditText.setText(snapshot.child("pDiscount").getValue().toString().trim());
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+        }
+        loaddialog.show();
     }
 
     public boolean pnameValidation(){
@@ -355,7 +389,7 @@ public class ProductsActivity extends AppCompatActivity {
         MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
         return mimeTypeMap.getExtensionFromMimeType(cr.getType(uri));
     }
-    private void validation(String imageStatus) {
+    private void validation(String imageStatus, String purpose, String productId) {
         boolean imageErr = false, pnameErr = false, pdescErr = false, ppriceErr = false, pstockErr = false, pdiscountErr = false;
         pnameErr = pnameValidation();
         pdescErr = pdescValidation();
@@ -368,10 +402,10 @@ public class ProductsActivity extends AppCompatActivity {
             imageErr = imageValidation();
         }
         if((pnameErr && pdescErr && ppriceErr && pstockErr && pdiscountErr && imageErr) == true){
-            product();
+            product(purpose, productId);
         }
     }
-    private void product() {
+    private void product(String purpose, String productId) {
         if(imageUri != null){
             Dialog loading = new Dialog(ProductsActivity.this);
             loading.setContentView(R.layout.dialo_loading);
@@ -394,16 +428,6 @@ public class ProductsActivity extends AppCompatActivity {
                             loading.dismiss();
                             String photoLink = uri.toString();
 
-                            HashMap<String, String> mydata = new HashMap<String, String>();
-                            mydata.put("pImage", "" + photoLink);
-                            mydata.put("pName", pNameEditText.getText().toString().trim());
-                            mydata.put("pDesc", pDescriptionEditText.getText().toString().trim());
-                            mydata.put("pStock", pStockEditText.getText().toString().trim());
-                            mydata.put("pPrice", pPriceEditText.getText().toString().trim());
-                            mydata.put("pDiscount", pDiscountEditText.getText().toString().trim());
-                            mydata.put("status", "1");
-                            MainActivity.myRef.child("Products").push().setValue(mydata);
-
                             Dialog alertdialog = new Dialog(ProductsActivity.this);
                             alertdialog.setContentView(R.layout.dialog_success);
                             alertdialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -413,8 +437,32 @@ public class ProductsActivity extends AppCompatActivity {
                             alertdialog.setCancelable(false);
                             alertdialog.setCanceledOnTouchOutside(false);
                             TextView message = alertdialog.findViewById(R.id.message);
-                            message.setText("Product Added Successfully!!!");
                             alertdialog.show();
+
+
+                            if(purpose.equals("add")){
+                                HashMap<String, String> mydata = new HashMap<String, String>();
+                                mydata.put("pImage", "" + photoLink);
+                                mydata.put("pName", pNameEditText.getText().toString().trim());
+                                mydata.put("pDesc", pDescriptionEditText.getText().toString().trim());
+                                mydata.put("pStock", pStockEditText.getText().toString().trim());
+                                mydata.put("pPrice", pPriceEditText.getText().toString().trim());
+                                mydata.put("pDiscount", pDiscountEditText.getText().toString().trim());
+                                mydata.put("status", "1");
+                                MainActivity.myRef.child("Products").push().setValue(mydata);
+                                message.setText("Product Added Successfully!!!");
+                            } else if(purpose.equals("edit")){
+                                MainActivity.myRef.child("Products").child(productId).child("pImage").setValue(photoLink);
+                                MainActivity.myRef.child("Products").child(productId).child("pName").setValue(pNameEditText.getText().toString().trim());
+                                MainActivity.myRef.child("Products").child(productId).child("pDesc").setValue(pDescriptionEditText.getText().toString().trim());
+                                MainActivity.myRef.child("Products").child(productId).child("pStock").setValue(pStockEditText.getText().toString().trim());
+                                MainActivity.myRef.child("Products").child(productId).child("pPrice").setValue(pPriceEditText.getText().toString().trim());
+                                MainActivity.myRef.child("Products").child(productId).child("pDiscount").setValue(pDiscountEditText.getText().toString().trim());
+                                message.setText("Product Edit Successfully!!!");
+
+                            }
+
+
 
                             new Handler().postDelayed(new Runnable() {
                                 @Override
@@ -481,6 +529,8 @@ public class ProductsActivity extends AppCompatActivity {
             if(!data.get(i).getpDiscount().equals("0")){
                 pDiscount.setVisibility(View.VISIBLE);
                 pDiscount.setText(data.get(i).getpDiscount()+"% OFF");
+            } else {
+                pPriceOff.setVisibility(View.GONE);
             }
             pName.setText(data.get(i).getpName());
             pStock.setText(data.get(i).getpStock()+" Stock");
@@ -491,6 +541,47 @@ public class ProductsActivity extends AppCompatActivity {
             double calcDiscount = Double.parseDouble(data.get(i).getpPrice()) * discount;
             double totalPrice = Double.parseDouble(data.get(i).getpPrice()) - calcDiscount;
             pPrice.setText("$"+Math.round(totalPrice));
+
+            options.setVisibility(View.VISIBLE);
+
+            deleteBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Dialog loaddialog = new Dialog(context);
+                    loaddialog.setContentView(R.layout.dialog_confirm);
+                    loaddialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+                    loaddialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                    loaddialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+                    loaddialog.getWindow().setGravity(Gravity.CENTER);
+                    loaddialog.setCancelable(false);
+                    loaddialog.setCanceledOnTouchOutside(false);
+                    Button cancelBtn, yesBtn;
+                    yesBtn = loaddialog.findViewById(R.id.yesBtn);
+                    cancelBtn = loaddialog.findViewById(R.id.cancelBtn);
+                    cancelBtn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            loaddialog.dismiss();
+                        }
+                    });
+                    yesBtn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            loaddialog.dismiss();
+                            MainActivity.myRef.child("Products").child(data.get(i).getId()).removeValue();
+                        }
+                    });
+
+                    loaddialog.show();
+                }
+            });
+
+            editBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    productForm("edit",""+data.get(i).getId());
+                }
+            });
 
             return productItem;
         }

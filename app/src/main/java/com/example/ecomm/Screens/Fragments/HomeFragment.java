@@ -19,6 +19,7 @@ import com.example.ecomm.Screens.Admin.AdminDashboardActivity;
 import com.example.ecomm.Screens.DashboardActivity;
 import com.example.ecomm.Screens.LoginActivity;
 import com.example.ecomm.Screens.ProductsActivity;
+import com.example.ecomm.Screens.SearchActivity;
 import com.example.ecomm.databinding.FragmentHomeBinding;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -82,7 +83,7 @@ public class HomeFragment extends Fragment {
         binding.searchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                startActivity(new Intent(container.getContext(), SearchActivity.class));
             }
         });
         return binding.getRoot();
