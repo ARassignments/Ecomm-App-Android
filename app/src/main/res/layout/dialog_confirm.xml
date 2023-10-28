@@ -21,13 +21,14 @@
             android:textColor="@color/myTheme"
             android:text="Are you sure?"
             android:fontFamily="@font/urbanist_bold"
-            android:textSize="20sp"/>
+            android:textSize="23sp"
+            android:layout_marginLeft="10dp"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginVertical="10dp">
+            android:layout_marginTop="10dp">
 
             <Button
                 android:id="@+id/cancelBtn"
@@ -35,8 +36,8 @@
                 android:textColor="@color/myTheme"
                 android:layout_width="wrap_content"
                 android:layout_weight="1"
-                android:backgroundTint="@color/white"
-                android:layout_marginRight="10dp"
+                android:backgroundTint="@color/myThemeExtraLight"
+                android:layout_margin="10dp"
                 style="@style/EcommButton"/>
 
             <Button
@@ -44,6 +45,7 @@
                 android:text="Yes"
                 android:layout_width="wrap_content"
                 android:layout_weight="1"
+                android:layout_margin="10dp"
                 style="@style/EcommButton"/>
 
         </LinearLayout>

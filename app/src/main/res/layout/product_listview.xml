@@ -139,13 +139,15 @@
 
         <TextView
             android:id="@+id/pPriceOff"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="$23"
             android:fontFamily="@font/urbanist_bold"
             android:textColor="#9F9F9F"
             android:textSize="13sp"
-            android:layout_marginVertical="5dp"/>
+            android:layout_marginVertical="5dp"
+            android:background="@drawable/line"
+            android:backgroundTint="#9F9F9F"/>
 
     </LinearLayout>
 

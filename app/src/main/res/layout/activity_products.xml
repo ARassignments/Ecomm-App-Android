@@ -54,7 +54,7 @@
             android:numColumns="2"
             android:verticalSpacing="10dp"
             android:horizontalSpacing="10dp"
-            android:paddingHorizontal="10dp"
+            android:paddingHorizontal="20dp"
             tools:listitem="@layout/product_listview"/>
 
     </LinearLayout>

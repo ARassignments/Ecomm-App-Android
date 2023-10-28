@@ -32,14 +32,6 @@
                 android:translationX="-15dp"
                 android:layout_weight="1"/>
 
-            <ImageView
-                android:id="@+id/logout"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@drawable/poweroff"
-                app:tint="@color/myTheme"
-                android:layout_marginRight="10dp"/>
-
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -101,7 +93,7 @@
                 android:layout_weight="1"
                 android:text="Search Here"
                 android:layout_marginHorizontal="10dp"
-                android:textSize="14sp"
+                android:textSize="16sp"
                 android:textColor="#BDBDBD"
                 android:fontFamily="@font/urbanist_regular"/>
 
@@ -113,11 +105,32 @@
 
         </LinearLayout>
 
-        <Button
-            android:id="@+id/productsBtn"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Products"/>
+            android:orientation="horizontal"
+            android:layout_marginHorizontal="25dp"
+            android:layout_marginVertical="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Products"
+                android:fontFamily="@font/urbanist_bold"
+                android:textSize="20sp"
+                android:textColor="@color/textColor"/>
+
+            <TextView
+                android:id="@+id/productsBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="See All"
+                android:fontFamily="@font/urbanist_bold"
+                android:textSize="16sp"
+                android:textColor="@color/myTheme"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 

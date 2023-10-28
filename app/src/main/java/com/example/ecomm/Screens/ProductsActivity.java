@@ -74,7 +74,7 @@ public class ProductsActivity extends AppCompatActivity {
     TextInputLayout pName, pDescription, pPrice, pStock, pDiscount;
     TextInputEditText pNameEditText, pDescriptionEditText, pPriceEditText, pStockEditText, pDiscountEditText;
     Button cancelBtn, saveChangesBtn;
-    TextView imageErrTextView;
+    TextView imageErrTextView, title;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -183,6 +183,7 @@ public class ProductsActivity extends AppCompatActivity {
         cancelBtn = loaddialog.findViewById(R.id.cancelBtn);
         saveChangesBtn = loaddialog.findViewById(R.id.saveChangesBtn);
         imageErrTextView = loaddialog.findViewById(R.id.imageErrTextView);
+        title = loaddialog.findViewById(R.id.title);
         imageadd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -198,7 +199,11 @@ public class ProductsActivity extends AppCompatActivity {
                 if(uploadTask != null && uploadTask.isInProgress()){
                     Toast.makeText(ProductsActivity.this, "Image Upload In Process!!!", Toast.LENGTH_SHORT).show();
                 } else {
-                    validation("false",purpose, productId);
+                    if(purpose.equals("add")){
+                        validation("false",purpose, productId);
+                    } else if(purpose.equals("edit")){
+                        validation("true",purpose, productId);
+                    }
                 }
             }
         });
@@ -290,6 +295,7 @@ public class ProductsActivity extends AppCompatActivity {
         });
 
         if(purpose.equals("edit")){
+            title.setText("Edit Product");
             MainActivity.myRef.child("Products").child(productId).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -416,7 +422,11 @@ public class ProductsActivity extends AppCompatActivity {
             loading.setCancelable(false);
             loading.setCanceledOnTouchOutside(false);
             TextView message = loading.findViewById(R.id.message);
-            message.setText("Creating...");
+            if(purpose.equals("edit")){
+                message.setText("Modifying...");
+            } else {
+                message.setText("Creating...");
+            }
             loading.show();
             uploadTask = mStorage.child("Images/"+System.currentTimeMillis()+"."+getFileExtension(imageUri)).putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
@@ -438,7 +448,6 @@ public class ProductsActivity extends AppCompatActivity {
                             alertdialog.setCanceledOnTouchOutside(false);
                             TextView message = alertdialog.findViewById(R.id.message);
                             alertdialog.show();
-
 
                             if(purpose.equals("add")){
                                 HashMap<String, String> mydata = new HashMap<String, String>();
@@ -462,8 +471,6 @@ public class ProductsActivity extends AppCompatActivity {
 
                             }
 
-
-
                             new Handler().postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
@@ -476,6 +483,34 @@ public class ProductsActivity extends AppCompatActivity {
                     });
                 }
             });
+        } else {
+            Dialog alertdialog = new Dialog(ProductsActivity.this);
+            alertdialog.setContentView(R.layout.dialog_success);
+            alertdialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+            alertdialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            alertdialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+            alertdialog.getWindow().setGravity(Gravity.CENTER);
+            alertdialog.setCancelable(false);
+            alertdialog.setCanceledOnTouchOutside(false);
+            TextView message = alertdialog.findViewById(R.id.message);
+            message.setText("Product Edit Successfully!!!");
+            alertdialog.show();
+
+            if(purpose.equals("edit")){
+                MainActivity.myRef.child("Products").child(productId).child("pName").setValue(pNameEditText.getText().toString().trim());
+                MainActivity.myRef.child("Products").child(productId).child("pDesc").setValue(pDescriptionEditText.getText().toString().trim());
+                MainActivity.myRef.child("Products").child(productId).child("pStock").setValue(pStockEditText.getText().toString().trim());
+                MainActivity.myRef.child("Products").child(productId).child("pPrice").setValue(pPriceEditText.getText().toString().trim());
+                MainActivity.myRef.child("Products").child(productId).child("pDiscount").setValue(pDiscountEditText.getText().toString().trim());
+            }
+
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    alertdialog.dismiss();
+                    loaddialog.dismiss();
+                }
+            },2000);
         }
 
     }

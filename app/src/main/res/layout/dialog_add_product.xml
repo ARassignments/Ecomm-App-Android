@@ -19,6 +19,7 @@
             android:gravity="center">
 
             <TextView
+                android:id="@+id/title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -30,7 +31,8 @@
 
             <FrameLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp">
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/image"
@@ -47,7 +49,7 @@
                     android:layout_height="40dp"
                     android:background="@drawable/border_radius"
                     android:src="@drawable/edit"
-                    android:backgroundTint="@color/white"
+                    android:backgroundTint="#CCFFFFFF"
                     android:pointerIcon="arrow"
                     app:tint="@color/myTheme" />
 
@@ -125,6 +127,7 @@
                 app:counterMaxLength="8"
                 app:endIconMode="clear_text"
                 app:errorEnabled="true"
+                app:prefixText="$"
                 app:helperText="Only Number Allowed!!!"
                 app:startIconDrawable="@drawable/price"
                 app:startIconTint="@color/myTheme">
@@ -173,6 +176,7 @@
                 android:hint="Enter Stock"
                 app:counterEnabled="true"
                 app:counterMaxLength="4"
+                app:suffixText=" qty"
                 app:endIconMode="clear_text"
                 app:errorEnabled="true"
                 app:helperText="Only Number Allowed!!!"
