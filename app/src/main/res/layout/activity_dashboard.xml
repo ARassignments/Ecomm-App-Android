@@ -17,8 +17,10 @@
         android:id="@+id/bottomAppBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingVertical="10dp"
         app:backgroundTint="@color/white"
         app:menu="@menu/bottom_menu"
+        app:labelVisibilityMode="auto"
         app:itemTextAppearanceActive="@style/BottomNavigationViewTextStyleActive"
         app:itemTextAppearanceInactive="@style/BottomNavigationViewTextStyle"/>
 

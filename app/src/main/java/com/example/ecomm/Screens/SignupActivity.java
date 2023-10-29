@@ -29,7 +29,10 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.regex.Pattern;
 
 public class SignupActivity extends AppCompatActivity {
@@ -243,13 +246,18 @@ public class SignupActivity extends AppCompatActivity {
                             alertdialog.setCancelable(false);
                             alertdialog.setCanceledOnTouchOutside(false);
                             alertdialog.show();
+                            String currentDate = new SimpleDateFormat("dd-MMMM-yyyy", Locale.getDefault()).format(new Date());
+
 
                             FirebaseUser user = myAuth.getCurrentUser();
 
                             HashMap<String,String> obj = new HashMap<String,String>();
                             obj.put("name",nameEditText.getText().toString().trim());
                             obj.put("email",emailEditText.getText().toString().trim());
+                            obj.put("image","");
+                            obj.put("gender","");
                             obj.put("role","user");
+                            obj.put("createdOn",currentDate);
                             obj.put("status","1");
 
                             db.child("Users").child(user.getUid()).setValue(obj);

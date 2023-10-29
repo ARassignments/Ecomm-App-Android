@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.ecomm.R;
+import com.example.ecomm.Screens.DashboardActivity;
 import com.example.ecomm.databinding.FragmentCartBinding;
 
 public class CartFragment extends Fragment {
@@ -19,7 +20,7 @@ public class CartFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding =  FragmentCartBinding.inflate(inflater, container, false);
-
+//        DashboardActivity.updateCartCount(20);
         return binding.getRoot();
     }
 }

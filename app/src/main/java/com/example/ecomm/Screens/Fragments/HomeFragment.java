@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.bumptech.glide.Glide;
 import com.example.ecomm.MainActivity;
 import com.example.ecomm.R;
 import com.example.ecomm.Screens.Admin.AdminDashboardActivity;
@@ -53,6 +54,9 @@ public class HomeFragment extends Fragment {
                     String roleCheck = snapshot.child("role").getValue().toString().trim();
                     binding.roleTextView.setText(roleCheck);
                     binding.nameTextView.setText(snapshot.child("name").getValue().toString().trim());
+                    if(!snapshot.child("image").getValue().toString().trim().equals("")){
+                        Glide.with(container.getContext()).load(snapshot.child("image").getValue().toString().trim()).into(binding.profile);
+                    }
                 }
             }
 

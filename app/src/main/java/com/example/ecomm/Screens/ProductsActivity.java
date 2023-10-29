@@ -577,7 +577,24 @@ public class ProductsActivity extends AppCompatActivity {
             double totalPrice = Double.parseDouble(data.get(i).getpPrice()) - calcDiscount;
             pPrice.setText("$"+Math.round(totalPrice));
 
-            options.setVisibility(View.VISIBLE);
+            MainActivity.myRef.child("Users").child(userId).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if(snapshot.exists()){
+                        String roleCheck = snapshot.child("role").getValue().toString().trim();
+                        if(roleCheck.equals("user")){
+                            options.setVisibility(View.GONE);
+                        } else if(roleCheck.equals("admin")){
+                            options.setVisibility(View.VISIBLE);
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
 
             deleteBtn.setOnClickListener(new View.OnClickListener() {
                 @Override

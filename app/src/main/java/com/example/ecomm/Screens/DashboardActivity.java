@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.renderscript.ScriptGroup;
 import android.view.MenuItem;
@@ -25,6 +26,7 @@ import com.example.ecomm.Screens.Fragments.HomeFragment;
 import com.example.ecomm.Screens.Fragments.OrdersFragment;
 import com.example.ecomm.Screens.Fragments.WishlistFragment;
 import com.example.ecomm.databinding.ActivityDashboardBinding;
+import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -39,6 +41,7 @@ public class DashboardActivity extends AppCompatActivity {
     SharedPreferences.Editor editor;
     String userId;
     ActivityDashboardBinding binding;
+    public static BadgeDrawable badgeDrawable;
     @SuppressLint("NonConstantResourceId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +56,9 @@ public class DashboardActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         replaceFragment(new HomeFragment());
+        badgeDrawable = binding.bottomAppBar.getOrCreateBadge(R.id.cart);
+        badgeDrawable.setVisible(false);
+        badgeDrawable.setBackgroundColor(getResources().getColor(R.color.myThemeLight));
         binding.bottomAppBar.setOnItemSelectedListener(item -> {
             switch (item.getTitle().toString()){
                 case "Home":
@@ -95,5 +101,14 @@ public class DashboardActivity extends AppCompatActivity {
     }
     public void replaceFragment(Fragment fragment){
         getSupportFragmentManager().beginTransaction().replace(R.id.frame,fragment).commit();
+    }
+
+    public static void updateCartCount(int number){
+        if (number > 0) {
+            badgeDrawable.setVisible(true);
+            badgeDrawable.setNumber(number);
+        } else {
+            badgeDrawable.setVisible(false);
+        }
     }
 }

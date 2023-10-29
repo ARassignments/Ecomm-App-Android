@@ -8,8 +8,8 @@
     android:background="@drawable/bottom_sheet_bg">
 
     <LinearLayout
-        android:layout_width="40dp"
-        android:layout_height="3dp"
+        android:layout_width="35dp"
+        android:layout_height="4dp"
         android:layout_marginBottom="10dp"
         android:background="@drawable/small_handle"/>
 
@@ -31,7 +31,7 @@
         android:fontFamily="@font/urbanist_bold"
         android:textColor="#424242"
         android:textSize="20sp"
-        android:layout_marginBottom="10dp"/>
+        android:layout_marginBottom="15dp"/>
 
     <LinearLayout
         android:layout_width="match_parent"
