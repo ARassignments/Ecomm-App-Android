@@ -32,6 +32,7 @@ import com.example.ecomm.MainActivity;
 import com.example.ecomm.R;
 import com.example.ecomm.Screens.LoginActivity;
 import com.example.ecomm.Screens.ProductsActivity;
+import com.example.ecomm.Screens.SignupActivity;
 import com.example.ecomm.databinding.FragmentAccountBinding;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -213,75 +214,77 @@ public class AccountFragment extends Fragment {
         return mimeTypeMap.getExtensionFromMimeType(cr.getType(uri));
     }
     private void validation(String imageStatus) {
-        boolean imageErr = false;
-        if(imageStatus.equals("true")){
-            imageErr = true;
-        } else {
-            imageErr = imageValidation();
-        }
-        if((imageErr) == true){
-            if(imageUri != null){
-                Dialog loading = new Dialog(getContext());
-                loading.setContentView(R.layout.dialo_loading);
-                loading.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-                loading.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-                loading.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-                loading.getWindow().setGravity(Gravity.CENTER);
-                loading.setCancelable(false);
-                loading.setCanceledOnTouchOutside(false);
-                TextView message = loading.findViewById(R.id.message);
-                message.setText("Uploading...");
-                loading.show();
-                uploadTask = mStorage.child("Profiles/"+userId+"."+getFileExtension(imageUri)).putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        Task<Uri> task = taskSnapshot.getMetadata().getReference().getDownloadUrl();
-                        task.addOnSuccessListener(new OnSuccessListener<Uri>() {
-                            @Override
-                            public void onSuccess(Uri uri) {
-                                loading.dismiss();
-                                String photoLink = uri.toString();
+        if(MainActivity.connectionCheck(getContext())){
+            boolean imageErr = false;
+            if(imageStatus.equals("true")){
+                imageErr = true;
+            } else {
+                imageErr = imageValidation();
+            }
+            if((imageErr) == true){
+                if(imageUri != null){
+                    Dialog loading = new Dialog(getContext());
+                    loading.setContentView(R.layout.dialo_loading);
+                    loading.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+                    loading.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                    loading.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+                    loading.getWindow().setGravity(Gravity.CENTER);
+                    loading.setCancelable(false);
+                    loading.setCanceledOnTouchOutside(false);
+                    TextView message = loading.findViewById(R.id.message);
+                    message.setText("Uploading...");
+                    loading.show();
+                    uploadTask = mStorage.child("Profiles/"+userId+"."+getFileExtension(imageUri)).putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            Task<Uri> task = taskSnapshot.getMetadata().getReference().getDownloadUrl();
+                            task.addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    loading.dismiss();
+                                    String photoLink = uri.toString();
 
-                                MainActivity.myRef.child("Users").child(userId).child("image").setValue(photoLink);
-                                Dialog alertdialog = new Dialog(getContext());
-                                alertdialog.setContentView(R.layout.dialog_success);
-                                alertdialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-                                alertdialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                                alertdialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-                                alertdialog.getWindow().setGravity(Gravity.CENTER);
-                                alertdialog.setCancelable(false);
-                                alertdialog.setCanceledOnTouchOutside(false);
-                                TextView message = alertdialog.findViewById(R.id.message);
-                                message.setText("Product Edit Successfully!!!");
-                                alertdialog.show();
+                                    MainActivity.myRef.child("Users").child(userId).child("image").setValue(photoLink);
+                                    Dialog alertdialog = new Dialog(getContext());
+                                    alertdialog.setContentView(R.layout.dialog_success);
+                                    alertdialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+                                    alertdialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                                    alertdialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+                                    alertdialog.getWindow().setGravity(Gravity.CENTER);
+                                    alertdialog.setCancelable(false);
+                                    alertdialog.setCanceledOnTouchOutside(false);
+                                    TextView message = alertdialog.findViewById(R.id.message);
+                                    message.setText("Product Edit Successfully!!!");
+                                    alertdialog.show();
 
-                                new Handler().postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        alertdialog.dismiss();
-                                        imagedialog.dismiss();
-                                        MainActivity.myRef.child("Users").child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
-                                            @Override
-                                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                                if(snapshot.exists()){
-                                                    if(!snapshot.child("image").getValue().toString().trim().equals("")){
-                                                        Glide.with(getContext()).load(snapshot.child("image").getValue().toString().trim()).into(binding.profileimage);
+                                    new Handler().postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            alertdialog.dismiss();
+                                            imagedialog.dismiss();
+                                            MainActivity.myRef.child("Users").child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
+                                                @Override
+                                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                    if(snapshot.exists()){
+                                                        if(!snapshot.child("image").getValue().toString().trim().equals("")){
+                                                            Glide.with(getContext()).load(snapshot.child("image").getValue().toString().trim()).into(binding.profileimage);
+                                                        }
                                                     }
                                                 }
-                                            }
 
-                                            @Override
-                                            public void onCancelled(@NonNull DatabaseError error) {
+                                                @Override
+                                                public void onCancelled(@NonNull DatabaseError error) {
 
-                                            }
-                                        });
-                                    }
-                                },2000);
+                                                }
+                                            });
+                                        }
+                                    },2000);
 
-                            }
-                        });
-                    }
-                });
+                                }
+                            });
+                        }
+                    });
+                }
             }
         }
     }

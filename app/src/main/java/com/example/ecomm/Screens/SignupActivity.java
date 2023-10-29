@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.ecomm.MainActivity;
 import com.example.ecomm.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -216,86 +217,88 @@ public class SignupActivity extends AppCompatActivity {
     }
 
     public void validation(){
-        boolean nameErr = false, emailErr = false, passwordErr = false, cpasswordErr = false;
-        nameErr = nameValidation();
-        emailErr = emailValidation();
-        passwordErr = passwordValidation();
-        cpasswordErr = cPasswordValidation();
-        if((nameErr && emailErr && passwordErr && cpasswordErr) == true){
-            Dialog loaddialog = new Dialog(SignupActivity.this);
-            loaddialog.setContentView(R.layout.dialo_loading);
-            loaddialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-            loaddialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-            loaddialog.getWindow().setGravity(Gravity.CENTER);
-            loaddialog.setCancelable(false);
-            loaddialog.setCanceledOnTouchOutside(false);
-            TextView message = loaddialog.findViewById(R.id.message);
-            message.setText("Creating...");
-            loaddialog.show();
-            // Signup Here
-            myAuth.createUserWithEmailAndPassword(emailEditText.getText().toString().trim(),passwordEditText.getText().toString().trim())
-                    .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
-                        @Override
-                        public void onSuccess(AuthResult authResult) {
-                            loaddialog.dismiss();
-                            Dialog alertdialog = new Dialog(SignupActivity.this);
-                            alertdialog.setContentView(R.layout.dialog_success);
-                            alertdialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-                            alertdialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-                            alertdialog.getWindow().setGravity(Gravity.CENTER);
-                            alertdialog.setCancelable(false);
-                            alertdialog.setCanceledOnTouchOutside(false);
-                            alertdialog.show();
-                            String currentDate = new SimpleDateFormat("dd-MMMM-yyyy", Locale.getDefault()).format(new Date());
+        if(MainActivity.connectionCheck(SignupActivity.this)){
+            boolean nameErr = false, emailErr = false, passwordErr = false, cpasswordErr = false;
+            nameErr = nameValidation();
+            emailErr = emailValidation();
+            passwordErr = passwordValidation();
+            cpasswordErr = cPasswordValidation();
+            if((nameErr && emailErr && passwordErr && cpasswordErr) == true){
+                Dialog loaddialog = new Dialog(SignupActivity.this);
+                loaddialog.setContentView(R.layout.dialo_loading);
+                loaddialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+                loaddialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                loaddialog.getWindow().setGravity(Gravity.CENTER);
+                loaddialog.setCancelable(false);
+                loaddialog.setCanceledOnTouchOutside(false);
+                TextView message = loaddialog.findViewById(R.id.message);
+                message.setText("Creating...");
+                loaddialog.show();
+                // Signup Here
+                myAuth.createUserWithEmailAndPassword(emailEditText.getText().toString().trim(),passwordEditText.getText().toString().trim())
+                        .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+                            @Override
+                            public void onSuccess(AuthResult authResult) {
+                                loaddialog.dismiss();
+                                Dialog alertdialog = new Dialog(SignupActivity.this);
+                                alertdialog.setContentView(R.layout.dialog_success);
+                                alertdialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+                                alertdialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                                alertdialog.getWindow().setGravity(Gravity.CENTER);
+                                alertdialog.setCancelable(false);
+                                alertdialog.setCanceledOnTouchOutside(false);
+                                alertdialog.show();
+                                String currentDate = new SimpleDateFormat("dd-MMMM-yyyy", Locale.getDefault()).format(new Date());
 
 
-                            FirebaseUser user = myAuth.getCurrentUser();
+                                FirebaseUser user = myAuth.getCurrentUser();
 
-                            HashMap<String,String> obj = new HashMap<String,String>();
-                            obj.put("name",nameEditText.getText().toString().trim());
-                            obj.put("email",emailEditText.getText().toString().trim());
-                            obj.put("image","");
-                            obj.put("gender","");
-                            obj.put("role","user");
-                            obj.put("createdOn",currentDate);
-                            obj.put("status","1");
+                                HashMap<String,String> obj = new HashMap<String,String>();
+                                obj.put("name",nameEditText.getText().toString().trim());
+                                obj.put("email",emailEditText.getText().toString().trim());
+                                obj.put("image","");
+                                obj.put("gender","");
+                                obj.put("role","user");
+                                obj.put("createdOn",currentDate);
+                                obj.put("status","1");
 
-                            db.child("Users").child(user.getUid()).setValue(obj);
+                                db.child("Users").child(user.getUid()).setValue(obj);
 
-                            new Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    alertdialog.dismiss();
-                                    SignupActivity.super.onBackPressed();
-                                }
-                            },2000);
+                                new Handler().postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        alertdialog.dismiss();
+                                        SignupActivity.super.onBackPressed();
+                                    }
+                                },2000);
 
 //                            SignupActivity.super.onBackPressed();
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            loaddialog.dismiss();
-                            Dialog alertdialog = new Dialog(SignupActivity.this);
-                            alertdialog.setContentView(R.layout.dialog_error);
-                            alertdialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-                            alertdialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-                            alertdialog.getWindow().setGravity(Gravity.CENTER);
-                            alertdialog.setCancelable(false);
-                            alertdialog.setCanceledOnTouchOutside(false);
-                            TextView message = alertdialog.findViewById(R.id.message);
-                            message.setText("Your is Already Exist!!!");
-                            alertdialog.show();
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                loaddialog.dismiss();
+                                Dialog alertdialog = new Dialog(SignupActivity.this);
+                                alertdialog.setContentView(R.layout.dialog_error);
+                                alertdialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+                                alertdialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                                alertdialog.getWindow().setGravity(Gravity.CENTER);
+                                alertdialog.setCancelable(false);
+                                alertdialog.setCanceledOnTouchOutside(false);
+                                TextView message = alertdialog.findViewById(R.id.message);
+                                message.setText("Your is Already Exist!!!");
+                                alertdialog.show();
 
-                            new Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    alertdialog.dismiss();
-                                }
-                            },3000);
-                        }
-                    });
+                                new Handler().postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        alertdialog.dismiss();
+                                    }
+                                },3000);
+                            }
+                        });
+            }
         }
     }
 }

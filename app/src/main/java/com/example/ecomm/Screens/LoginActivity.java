@@ -22,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.ecomm.MainActivity;
 import com.example.ecomm.R;
 import com.example.ecomm.Screens.Admin.AdminDashboardActivity;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -156,111 +157,113 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void validation(){
-        boolean emailErr = false, passwordErr = false;
-        emailErr = emailValidation();
-        passwordErr = passwordValidation();
-        if((emailErr && passwordErr ) == true){
-            Dialog loaddialog = new Dialog(LoginActivity.this);
-            loaddialog.setContentView(R.layout.dialo_loading);
-            loaddialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-            loaddialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-            loaddialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-            loaddialog.getWindow().setGravity(Gravity.CENTER);
-            loaddialog.setCancelable(false);
-            loaddialog.setCanceledOnTouchOutside(false);
-            TextView message = loaddialog.findViewById(R.id.message);
-            message.setText("Login...");
-            loaddialog.show();
-            // Login Here
-            myAuth.signInWithEmailAndPassword(emailEditText.getText().toString().trim(),passwordEditText.getText().toString().trim())
-                    .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
-                        @Override
-                        public void onSuccess(AuthResult authResult) {
-                            loaddialog.dismiss();
-                            Dialog alertdialog = new Dialog(LoginActivity.this);
-                            alertdialog.setContentView(R.layout.dialog_success);
-                            alertdialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-                            alertdialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                            alertdialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-                            alertdialog.getWindow().setGravity(Gravity.CENTER);
-                            alertdialog.setCancelable(false);
-                            alertdialog.setCanceledOnTouchOutside(false);
-                            TextView message = alertdialog.findViewById(R.id.message);
-                            message.setText("Login Successfully!!!");
+        if(MainActivity.connectionCheck(LoginActivity.this)){
+            boolean emailErr = false, passwordErr = false;
+            emailErr = emailValidation();
+            passwordErr = passwordValidation();
+            if((emailErr && passwordErr ) == true){
+                Dialog loaddialog = new Dialog(LoginActivity.this);
+                loaddialog.setContentView(R.layout.dialo_loading);
+                loaddialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+                loaddialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                loaddialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+                loaddialog.getWindow().setGravity(Gravity.CENTER);
+                loaddialog.setCancelable(false);
+                loaddialog.setCanceledOnTouchOutside(false);
+                TextView message = loaddialog.findViewById(R.id.message);
+                message.setText("Login...");
+                loaddialog.show();
+                // Login Here
+                myAuth.signInWithEmailAndPassword(emailEditText.getText().toString().trim(),passwordEditText.getText().toString().trim())
+                        .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+                            @Override
+                            public void onSuccess(AuthResult authResult) {
+                                loaddialog.dismiss();
+                                Dialog alertdialog = new Dialog(LoginActivity.this);
+                                alertdialog.setContentView(R.layout.dialog_success);
+                                alertdialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+                                alertdialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                                alertdialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+                                alertdialog.getWindow().setGravity(Gravity.CENTER);
+                                alertdialog.setCancelable(false);
+                                alertdialog.setCanceledOnTouchOutside(false);
+                                TextView message = alertdialog.findViewById(R.id.message);
+                                message.setText("Login Successfully!!!");
 
-                            FirebaseUser user = myAuth.getCurrentUser();
+                                FirebaseUser user = myAuth.getCurrentUser();
 
-                            db.child("Users").child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                    if(snapshot.exists()){
-                                        String role = snapshot.child("role").getValue().toString().trim();
-                                        String status = snapshot.child("status").getValue().toString().trim();
-                                        if(status.equals("1")){
-                                            alertdialog.show();
-                                            if(rememberMe.isChecked()){
-                                                editor.putString("loginStatus","true");
+                                db.child("Users").child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                        if(snapshot.exists()){
+                                            String role = snapshot.child("role").getValue().toString().trim();
+                                            String status = snapshot.child("status").getValue().toString().trim();
+                                            if(status.equals("1")){
+                                                alertdialog.show();
+                                                if(rememberMe.isChecked()){
+                                                    editor.putString("loginStatus","true");
+                                                    editor.commit();
+                                                }
+
+                                                editor.putString("userId",user.getUid());
+                                                editor.putString("role",role);
+                                                editor.putString("status",status);
                                                 editor.commit();
-                                            }
 
-                                            editor.putString("userId",user.getUid());
-                                            editor.putString("role",role);
-                                            editor.putString("status",status);
-                                            editor.commit();
-
-                                            new Handler().postDelayed(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    alertdialog.dismiss();
-                                                    startActivity(new Intent(LoginActivity.this, DashboardActivity.class));
-                                                    finish();
-                                                    if(role.equals("user")){
-                                                    } else if(role.equals("admin")){
+                                                new Handler().postDelayed(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        alertdialog.dismiss();
+                                                        startActivity(new Intent(LoginActivity.this, DashboardActivity.class));
+                                                        finish();
+                                                        if(role.equals("user")){
+                                                        } else if(role.equals("admin")){
 //                                                        startActivity(new Intent(LoginActivity.this, AdminDashboardActivity.class));
 //                                                        finish();
-                                                    }
+                                                        }
 
-                                                }
-                                            },3000);
-                                        } else if(status.equals("0")){
-                                            Toast.makeText(LoginActivity.this, "Your Account is Suspended By Admin!!!", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                },3000);
+                                            } else if(status.equals("0")){
+                                                Toast.makeText(LoginActivity.this, "Your Account is Suspended By Admin!!!", Toast.LENGTH_SHORT).show();
+                                            }
                                         }
                                     }
-                                }
 
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError error) {
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError error) {
 
-                                }
-                            });
+                                    }
+                                });
 
 
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            loaddialog.dismiss();
-                            Dialog alertdialog = new Dialog(LoginActivity.this);
-                            alertdialog.setContentView(R.layout.dialog_error);
-                            alertdialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-                            alertdialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-                            alertdialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-                            alertdialog.getWindow().setGravity(Gravity.CENTER);
-                            alertdialog.setCancelable(false);
-                            alertdialog.setCanceledOnTouchOutside(false);
-                            TextView message = alertdialog.findViewById(R.id.message);
-                            message.setText("Email Address OR Password is wrong!!!");
-                            alertdialog.show();
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                loaddialog.dismiss();
+                                Dialog alertdialog = new Dialog(LoginActivity.this);
+                                alertdialog.setContentView(R.layout.dialog_error);
+                                alertdialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+                                alertdialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                                alertdialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+                                alertdialog.getWindow().setGravity(Gravity.CENTER);
+                                alertdialog.setCancelable(false);
+                                alertdialog.setCanceledOnTouchOutside(false);
+                                TextView message = alertdialog.findViewById(R.id.message);
+                                message.setText("Email Address OR Password is wrong!!!");
+                                alertdialog.show();
 
-                            new Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    alertdialog.dismiss();
-                                }
-                            },3000);
-                        }
-                    });
+                                new Handler().postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        alertdialog.dismiss();
+                                    }
+                                },3000);
+                            }
+                        });
+            }
         }
     }
 

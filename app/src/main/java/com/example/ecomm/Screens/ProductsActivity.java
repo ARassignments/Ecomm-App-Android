@@ -412,107 +412,108 @@ public class ProductsActivity extends AppCompatActivity {
         }
     }
     private void product(String purpose, String productId) {
-        if(imageUri != null){
-            Dialog loading = new Dialog(ProductsActivity.this);
-            loading.setContentView(R.layout.dialo_loading);
-            loading.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-            loading.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-            loading.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-            loading.getWindow().setGravity(Gravity.CENTER);
-            loading.setCancelable(false);
-            loading.setCanceledOnTouchOutside(false);
-            TextView message = loading.findViewById(R.id.message);
-            if(purpose.equals("edit")){
-                message.setText("Modifying...");
-            } else {
-                message.setText("Creating...");
-            }
-            loading.show();
-            uploadTask = mStorage.child("Images/"+System.currentTimeMillis()+"."+getFileExtension(imageUri)).putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    Task<Uri> task = taskSnapshot.getMetadata().getReference().getDownloadUrl();
-                    task.addOnSuccessListener(new OnSuccessListener<Uri>() {
-                        @Override
-                        public void onSuccess(Uri uri) {
-                            loading.dismiss();
-                            String photoLink = uri.toString();
+        if(MainActivity.connectionCheck(ProductsActivity.this)){
+            if(imageUri != null){
+                Dialog loading = new Dialog(ProductsActivity.this);
+                loading.setContentView(R.layout.dialo_loading);
+                loading.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+                loading.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                loading.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+                loading.getWindow().setGravity(Gravity.CENTER);
+                loading.setCancelable(false);
+                loading.setCanceledOnTouchOutside(false);
+                TextView message = loading.findViewById(R.id.message);
+                if(purpose.equals("edit")){
+                    message.setText("Modifying...");
+                } else {
+                    message.setText("Creating...");
+                }
+                loading.show();
+                uploadTask = mStorage.child("Images/"+System.currentTimeMillis()+"."+getFileExtension(imageUri)).putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        Task<Uri> task = taskSnapshot.getMetadata().getReference().getDownloadUrl();
+                        task.addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                loading.dismiss();
+                                String photoLink = uri.toString();
 
-                            Dialog alertdialog = new Dialog(ProductsActivity.this);
-                            alertdialog.setContentView(R.layout.dialog_success);
-                            alertdialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-                            alertdialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                            alertdialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-                            alertdialog.getWindow().setGravity(Gravity.CENTER);
-                            alertdialog.setCancelable(false);
-                            alertdialog.setCanceledOnTouchOutside(false);
-                            TextView message = alertdialog.findViewById(R.id.message);
-                            alertdialog.show();
+                                Dialog alertdialog = new Dialog(ProductsActivity.this);
+                                alertdialog.setContentView(R.layout.dialog_success);
+                                alertdialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+                                alertdialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                                alertdialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+                                alertdialog.getWindow().setGravity(Gravity.CENTER);
+                                alertdialog.setCancelable(false);
+                                alertdialog.setCanceledOnTouchOutside(false);
+                                TextView message = alertdialog.findViewById(R.id.message);
+                                alertdialog.show();
 
-                            if(purpose.equals("add")){
-                                HashMap<String, String> mydata = new HashMap<String, String>();
-                                mydata.put("pImage", "" + photoLink);
-                                mydata.put("pName", pNameEditText.getText().toString().trim());
-                                mydata.put("pDesc", pDescriptionEditText.getText().toString().trim());
-                                mydata.put("pStock", pStockEditText.getText().toString().trim());
-                                mydata.put("pPrice", pPriceEditText.getText().toString().trim());
-                                mydata.put("pDiscount", pDiscountEditText.getText().toString().trim());
-                                mydata.put("status", "1");
-                                MainActivity.myRef.child("Products").push().setValue(mydata);
-                                message.setText("Product Added Successfully!!!");
-                            } else if(purpose.equals("edit")){
-                                MainActivity.myRef.child("Products").child(productId).child("pImage").setValue(photoLink);
-                                MainActivity.myRef.child("Products").child(productId).child("pName").setValue(pNameEditText.getText().toString().trim());
-                                MainActivity.myRef.child("Products").child(productId).child("pDesc").setValue(pDescriptionEditText.getText().toString().trim());
-                                MainActivity.myRef.child("Products").child(productId).child("pStock").setValue(pStockEditText.getText().toString().trim());
-                                MainActivity.myRef.child("Products").child(productId).child("pPrice").setValue(pPriceEditText.getText().toString().trim());
-                                MainActivity.myRef.child("Products").child(productId).child("pDiscount").setValue(pDiscountEditText.getText().toString().trim());
-                                message.setText("Product Edit Successfully!!!");
+                                if(purpose.equals("add")){
+                                    HashMap<String, String> mydata = new HashMap<String, String>();
+                                    mydata.put("pImage", "" + photoLink);
+                                    mydata.put("pName", pNameEditText.getText().toString().trim());
+                                    mydata.put("pDesc", pDescriptionEditText.getText().toString().trim());
+                                    mydata.put("pStock", pStockEditText.getText().toString().trim());
+                                    mydata.put("pPrice", pPriceEditText.getText().toString().trim());
+                                    mydata.put("pDiscount", pDiscountEditText.getText().toString().trim());
+                                    mydata.put("status", "1");
+                                    MainActivity.myRef.child("Products").push().setValue(mydata);
+                                    message.setText("Product Added Successfully!!!");
+                                } else if(purpose.equals("edit")){
+                                    MainActivity.myRef.child("Products").child(productId).child("pImage").setValue(photoLink);
+                                    MainActivity.myRef.child("Products").child(productId).child("pName").setValue(pNameEditText.getText().toString().trim());
+                                    MainActivity.myRef.child("Products").child(productId).child("pDesc").setValue(pDescriptionEditText.getText().toString().trim());
+                                    MainActivity.myRef.child("Products").child(productId).child("pStock").setValue(pStockEditText.getText().toString().trim());
+                                    MainActivity.myRef.child("Products").child(productId).child("pPrice").setValue(pPriceEditText.getText().toString().trim());
+                                    MainActivity.myRef.child("Products").child(productId).child("pDiscount").setValue(pDiscountEditText.getText().toString().trim());
+                                    message.setText("Product Edit Successfully!!!");
+
+                                }
+
+                                new Handler().postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        alertdialog.dismiss();
+                                        loaddialog.dismiss();
+                                    }
+                                },2000);
 
                             }
+                        });
+                    }
+                });
+            } else {
+                Dialog alertdialog = new Dialog(ProductsActivity.this);
+                alertdialog.setContentView(R.layout.dialog_success);
+                alertdialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+                alertdialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                alertdialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+                alertdialog.getWindow().setGravity(Gravity.CENTER);
+                alertdialog.setCancelable(false);
+                alertdialog.setCanceledOnTouchOutside(false);
+                TextView message = alertdialog.findViewById(R.id.message);
+                message.setText("Product Edit Successfully!!!");
+                alertdialog.show();
 
-                            new Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    alertdialog.dismiss();
-                                    loaddialog.dismiss();
-                                }
-                            },2000);
-
-                        }
-                    });
+                if(purpose.equals("edit")){
+                    MainActivity.myRef.child("Products").child(productId).child("pName").setValue(pNameEditText.getText().toString().trim());
+                    MainActivity.myRef.child("Products").child(productId).child("pDesc").setValue(pDescriptionEditText.getText().toString().trim());
+                    MainActivity.myRef.child("Products").child(productId).child("pStock").setValue(pStockEditText.getText().toString().trim());
+                    MainActivity.myRef.child("Products").child(productId).child("pPrice").setValue(pPriceEditText.getText().toString().trim());
+                    MainActivity.myRef.child("Products").child(productId).child("pDiscount").setValue(pDiscountEditText.getText().toString().trim());
                 }
-            });
-        } else {
-            Dialog alertdialog = new Dialog(ProductsActivity.this);
-            alertdialog.setContentView(R.layout.dialog_success);
-            alertdialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-            alertdialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-            alertdialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-            alertdialog.getWindow().setGravity(Gravity.CENTER);
-            alertdialog.setCancelable(false);
-            alertdialog.setCanceledOnTouchOutside(false);
-            TextView message = alertdialog.findViewById(R.id.message);
-            message.setText("Product Edit Successfully!!!");
-            alertdialog.show();
 
-            if(purpose.equals("edit")){
-                MainActivity.myRef.child("Products").child(productId).child("pName").setValue(pNameEditText.getText().toString().trim());
-                MainActivity.myRef.child("Products").child(productId).child("pDesc").setValue(pDescriptionEditText.getText().toString().trim());
-                MainActivity.myRef.child("Products").child(productId).child("pStock").setValue(pStockEditText.getText().toString().trim());
-                MainActivity.myRef.child("Products").child(productId).child("pPrice").setValue(pPriceEditText.getText().toString().trim());
-                MainActivity.myRef.child("Products").child(productId).child("pDiscount").setValue(pDiscountEditText.getText().toString().trim());
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        alertdialog.dismiss();
+                        loaddialog.dismiss();
+                    }
+                },2000);
             }
-
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    alertdialog.dismiss();
-                    loaddialog.dismiss();
-                }
-            },2000);
         }
-
     }
 
     public class MyAdapter extends BaseAdapter{
@@ -619,8 +620,10 @@ public class ProductsActivity extends AppCompatActivity {
                     yesBtn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            loaddialog.dismiss();
-                            MainActivity.myRef.child("Products").child(data.get(i).getId()).removeValue();
+                            if(MainActivity.connectionCheck(context)){
+                                loaddialog.dismiss();
+                                MainActivity.myRef.child("Products").child(data.get(i).getId()).removeValue();
+                            }
                         }
                     });
 
