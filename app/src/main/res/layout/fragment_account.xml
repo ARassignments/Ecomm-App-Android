@@ -3,162 +3,158 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".Screens.Fragments.AccountFragment">
+    tools:context=".Screens.Fragments.AccountFragment"
+    style="@style/screenBg">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:gravity="center_horizontal">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@drawable/logo"/>
 
-            <ImageView
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:src="@drawable/logo"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="My Account"
-                android:fontFamily="@font/urbanist_bold"
-                android:textSize="28sp"
-                android:translationX="-5dp"
-                android:textColor="@color/textColor"
-                android:layout_weight="1"/>
-
-        </LinearLayout>
-
-        <FrameLayout
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="10dp">
-
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/profileimage"
-                android:layout_width="120dp"
-                android:layout_height="120dp"
-                android:layout_centerVertical="true"
-                android:layout_gravity="center"
-                android:src="@drawable/logo" />
-
-            <ImageButton
-                android:id="@+id/editadd"
-                android:layout_gravity="end|bottom"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:background="@drawable/border_radius"
-                android:src="@drawable/edit"
-                android:backgroundTint="#CCFFFFFF"
-                android:pointerIcon="arrow"
-                app:tint="@color/myTheme" />
-
-        </FrameLayout>
-
-        <TextView
-            android:id="@+id/name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Your Name"
+            android:text="My Account"
             android:fontFamily="@font/urbanist_bold"
-            android:textColor="@color/textColor"
-            android:textSize="24sp"
-            android:textAlignment="center"
-            android:layout_marginTop="5dp"/>
+            android:textSize="28sp"
+            android:translationX="-5dp"
+            android:layout_weight="1"
+            style="@style/textColor"/>
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="10dp">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/profileimage"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
+            android:src="@drawable/logo" />
+
+        <ImageButton
+            android:id="@+id/editadd"
+            android:layout_gravity="end|bottom"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/border_radius"
+            android:src="@drawable/edit"
+            android:pointerIcon="arrow"
+            app:tint="@color/myTheme"
+            style="@style/searchBg"/>
+
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Your Name"
+        android:fontFamily="@font/urbanist_bold"
+        android:textSize="24sp"
+        android:textAlignment="center"
+        android:layout_marginTop="5dp"
+        style="@style/textColor"/>
+
+    <TextView
+        android:id="@+id/email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:fontFamily="@font/urbanist_semibold"
+        android:text="ecom@gmail.com"
+        android:textAlignment="center"
+        android:textSize="14sp"
+        style="@style/textColor"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="@drawable/line"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="20dp"
+        style="@style/searchBg"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:background="@drawable/search_bg"
+        android:backgroundTint="@color/transparent"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginBottom="10dp"
+        android:paddingVertical="15dp"
+        android:paddingHorizontal="10dp"
+        >
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/user_outlined"
+            style="@style/iconColor"/>
 
         <TextView
-            android:id="@+id/email"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="ecom@gmail.com"
+            android:layout_weight="1"
+            android:layout_marginHorizontal="10dp"
+            android:text="Edit Profile"
+            android:textAlignment="textStart"
             android:fontFamily="@font/urbanist_semibold"
-            android:textColor="@color/textColor"
-            android:textSize="14sp"
-            android:layout_marginTop="5dp"
-            android:textAlignment="center"/>
+            android:textSize="18sp"
+            style="@style/textColor"/>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="10dp"
-            android:background="@drawable/line"
-            android:backgroundTint="#EEEEEE"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginVertical="20dp"/>
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/arrow_right"
+            style="@style/iconColor"/>
 
-        <LinearLayout
-            android:layout_width="match_parent"
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/logoutBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:background="@drawable/search_bg"
+        android:backgroundTint="@color/transparent"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginBottom="10dp"
+        android:paddingVertical="15dp"
+        android:paddingHorizontal="10dp">
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/logout"
+            app:tint="#F75555" />
+
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:background="@drawable/search_bg"
-            android:backgroundTint="@color/white"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginBottom="10dp"
-            android:paddingVertical="15dp"
-            android:paddingHorizontal="10dp">
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/user_outlined"
-                app:tint="@color/textColor" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginHorizontal="10dp"
-                android:text="Edit Profile"
-                android:textAlignment="textStart"
-                android:textColor="@color/textColor"
-                android:fontFamily="@font/urbanist_semibold"
-                android:textSize="18sp"/>
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/arrow_right"
-                app:tint="@color/textColor" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/logoutBtn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:background="@drawable/search_bg"
-            android:backgroundTint="@color/white"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginBottom="10dp"
-            android:paddingVertical="15dp"
-            android:paddingHorizontal="10dp">
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/logout"
-                app:tint="#F75555" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginHorizontal="10dp"
-                android:text="Logout"
-                android:textAlignment="textStart"
-                android:textColor="#F75555"
-                android:fontFamily="@font/urbanist_semibold"
-                android:textSize="18sp"/>
-
-        </LinearLayout>
+            android:layout_weight="1"
+            android:layout_marginHorizontal="10dp"
+            android:text="Logout"
+            android:textAlignment="textStart"
+            android:textColor="#F75555"
+            android:fontFamily="@font/urbanist_semibold"
+            android:textSize="18sp"/>
 
     </LinearLayout>
 

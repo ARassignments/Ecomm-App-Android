@@ -3,13 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    style="@style/screenBg"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Screens.Fragments.HomeFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="@color/transparent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -28,9 +30,9 @@
                 android:text="comm"
                 android:fontFamily="@font/urbanist_bold"
                 android:textSize="38sp"
-                android:textColor="@color/textColor"
                 android:translationX="-15dp"
-                android:layout_weight="1"/>
+                android:layout_weight="1"
+                style="@style/textColor"/>
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -53,10 +55,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Andrew Sam"
-                    android:textColor="@color/textColor"
                     android:textSize="15sp"
-                    android:layout_marginTop="-5dp"
-                    android:fontFamily="@font/urbanist_bold"/>
+                    android:layout_marginTop="-3dp"
+                    android:fontFamily="@font/urbanist_bold"
+                    style="@style/textColor"/>
+
             </LinearLayout>
 
             <de.hdodenhof.circleimageview.CircleImageView
@@ -79,7 +82,8 @@
             android:layout_marginHorizontal="20dp"
             android:padding="15dp"
             android:gravity="center"
-            android:layout_marginTop="10dp">
+            android:layout_marginTop="10dp"
+            style="@style/searchBg">
 
             <ImageView
                 android:layout_width="24dp"
@@ -119,7 +123,7 @@
                 android:text="Products"
                 android:fontFamily="@font/urbanist_bold"
                 android:textSize="20sp"
-                android:textColor="@color/textColor"/>
+                style="@style/textColor"/>
 
             <TextView
                 android:id="@+id/productsBtn"

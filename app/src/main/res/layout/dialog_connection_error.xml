@@ -31,6 +31,7 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical"
                 android:gravity="center"
+                style="@style/screenBg"
                 android:padding="20dp">
 
                 <ImageView
@@ -44,22 +45,22 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="No Internet connection"
-                    android:textColor="#424242"
                     android:textSize="15sp"
                     android:textStyle="bold"
                     android:fontFamily="@font/urbanist_bold"
-                    android:textAlignment="center"/>
+                    android:textAlignment="center"
+                    style="@style/textColor"/>
 
                 <TextView
                     android:id="@+id/messageTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Message Here..."
-                    android:textColor="#919191"
                     android:fontFamily="@font/urbanist_regular"
                     android:textSize="12sp"
                     android:textStyle="bold"
-                    android:textAlignment="center"/>
+                    android:textAlignment="center"
+                    style="@style/textColorLight"/>
 
 
             </LinearLayout>

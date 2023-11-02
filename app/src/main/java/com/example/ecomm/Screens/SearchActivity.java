@@ -30,6 +30,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class SearchActivity extends AppCompatActivity {
 
@@ -67,10 +68,10 @@ public class SearchActivity extends AppCompatActivity {
                 binding.searchedWord.setText(binding.searchEditText.getText().toString().trim());
                 if(binding.searchEditText.getText().toString().length() > 0){
                     binding.clearText.setVisibility(View.VISIBLE);
-                    search();
                 } else {
                     binding.clearText.setVisibility(View.GONE);
                 }
+                search();
             }
 
             @Override
@@ -131,11 +132,16 @@ public class SearchActivity extends AppCompatActivity {
                         binding.gridView.setVisibility(View.VISIBLE);
                         binding.searchContainer.setVisibility(View.GONE);
                         binding.notfoundContainer.setVisibility(View.GONE);
+                        Collections.reverse(datalist);
                         MyAdapter adapter = new MyAdapter(SearchActivity.this,datalist);
                         binding.gridView.setAdapter(adapter);
                     } else {
                         binding.gridView.setVisibility(View.GONE);
-                        binding.notfoundContainer.setVisibility(View.VISIBLE);
+                        if(data.equals("")){
+                            binding.searchContainer.setVisibility(View.VISIBLE);
+                        } else {
+                            binding.notfoundContainer.setVisibility(View.VISIBLE);
+                        }
                     }
                     binding.totalCount.setText(datalist.size()+" found");
                 }

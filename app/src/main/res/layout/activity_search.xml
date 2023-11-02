@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    style="@style/screenBg"
     tools:context=".Screens.SearchActivity">
 
     <LinearLayout
@@ -23,8 +24,8 @@
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:src="@drawable/back"
-                app:tint="@color/textColor"
-                android:layout_marginRight="10dp"/>
+                android:layout_marginRight="10dp"
+                style="@style/iconColor"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -32,8 +33,8 @@
                 android:text="Search"
                 android:fontFamily="@font/urbanist_bold"
                 android:textSize="28sp"
-                android:textColor="@color/textColor"
-                android:layout_weight="1"/>
+                android:layout_weight="1"
+                style="@style/textColor"/>
 
 
         </LinearLayout>
@@ -48,7 +49,8 @@
             android:paddingHorizontal="15dp"
             android:gravity="center"
             android:layout_marginTop="-5dp"
-            android:layout_marginBottom="10dp">
+            android:layout_marginBottom="10dp"
+            style="@style/searchBg">
 
             <ImageView
                 android:layout_width="24dp"
@@ -65,12 +67,12 @@
                 android:textColorHint="#BDBDBD"
                 android:layout_marginHorizontal="10dp"
                 android:textSize="16sp"
-                android:textColor="#686868"
                 android:background="@color/transparent"
                 android:maxLines="1"
                 android:minLines="1"
                 android:maxLength="30"
-                android:fontFamily="@font/urbanist_regular"/>
+                android:fontFamily="@font/urbanist_regular"
+                style="@style/textColorLight"/>
 
             <ImageView
                 android:id="@+id/clear_text"
@@ -105,8 +107,8 @@
                 android:layout_height="wrap_content"
                 android:text='Result for “'
                 android:fontFamily="@font/urbanist_bold"
-                android:textColor="@color/textColor"
-                android:textSize="20sp"/>
+                android:textSize="20sp"
+                style="@style/textColor"/>
             <TextView
                 android:id="@+id/searchedWord"
                 android:layout_width="wrap_content"
@@ -121,8 +123,8 @@
                 android:layout_height="wrap_content"
                 android:text='”'
                 android:fontFamily="@font/urbanist_bold"
-                android:textColor="@color/textColor"
-                android:textSize="20sp"/>
+                android:textSize="20sp"
+                style="@style/textColor"/>
 
             <TextView
                 android:id="@+id/totalCount"
@@ -150,7 +152,7 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="220dp"
-                android:src="@drawable/not_found_frame"/>
+                style="@style/notFoundImage"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -164,18 +166,18 @@
                     android:layout_height="wrap_content"
                     android:text="Not Found"
                     android:fontFamily="@font/urbanist_bold"
-                    android:textColor="@color/textColor"
-                    android:textSize="24sp"/>
+                    android:textSize="24sp"
+                    style="@style/textColor"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Sorry, the keyword you entered cannot be found, please check again or search with another keyword."
                     android:fontFamily="@font/urbanist_regular"
-                    android:textColor="@color/textColor"
                     android:textAlignment="center"
                     android:layout_marginTop="10dp"
-                    android:textSize="18sp"/>
+                    android:textSize="18sp"
+                    style="@style/textColorLight"/>
 
 
             </LinearLayout>
@@ -209,18 +211,18 @@
                     android:layout_height="wrap_content"
                     android:text="Search Products"
                     android:fontFamily="@font/urbanist_bold"
-                    android:textColor="@color/textColor"
-                    android:textSize="24sp"/>
+                    android:textSize="24sp"
+                    style="@style/textColor"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="The keyword you entered can be found."
                     android:fontFamily="@font/urbanist_regular"
-                    android:textColor="@color/textColor"
                     android:textAlignment="center"
                     android:layout_marginTop="10dp"
-                    android:textSize="18sp"/>
+                    android:textSize="18sp"
+                    style="@style/textColorLight"/>
 
 
             </LinearLayout>

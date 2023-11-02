@@ -12,7 +12,8 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:padding="15dp"
-        android:gravity="center">
+        android:gravity="center"
+        style="@style/screenBg">
 
         <ProgressBar
             android:layout_width="60dp"
@@ -26,8 +27,9 @@
             android:layout_weight="1"
             android:textAlignment="center"
             android:text="SucccessFully Created"
-            android:fontFamily="@font/poppins_regular"
-            android:textSize="17sp"/>
+            android:fontFamily="@font/urbanist_regular"
+            android:textSize="17sp"
+            style="@style/textColorLight"/>
 
     </LinearLayout>
 

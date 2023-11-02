@@ -16,7 +16,8 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="15dp"
-            android:gravity="center">
+            android:gravity="center"
+            style="@style/screenBg">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -48,9 +49,9 @@
                     android:layout_height="40dp"
                     android:background="@drawable/border_radius"
                     android:src="@drawable/edit"
-                    android:backgroundTint="#CCFFFFFF"
                     android:pointerIcon="arrow"
-                    app:tint="@color/myTheme" />
+                    app:tint="@color/myTheme"
+                    style="@style/searchBg"/>
 
             </FrameLayout>
 
@@ -59,7 +60,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginBottom="5dp"
+                android:layout_marginBottom="10dp"
                 android:text="Image Error"
                 android:textColor="#FF3636"
                 android:textSize="11sp"
@@ -78,9 +79,7 @@
                     android:layout_marginBottom="10dp"
                     android:layout_marginRight="10dp"
                     android:layout_weight="1"
-                    android:textColor="@color/myTheme"
-                    android:backgroundTint="@color/myThemeExtraLight"
-                    style="@style/EcommButton"/>
+                    style="@style/EcommButtonSecondary"/>
 
                 <Button
                     android:id="@+id/saveChangesBtn"

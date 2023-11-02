@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    style="@style/screenBg"
     tools:context=".Screens.DashboardActivity">
 
     <FrameLayout
@@ -18,10 +19,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingVertical="10dp"
-        app:backgroundTint="@color/white"
         app:menu="@menu/bottom_menu"
         app:labelVisibilityMode="auto"
         app:itemTextAppearanceActive="@style/BottomNavigationViewTextStyleActive"
-        app:itemTextAppearanceInactive="@style/BottomNavigationViewTextStyle"/>
+        app:itemTextAppearanceInactive="@style/BottomNavigationViewTextStyle"
+        style="@style/screenBg"
+        app:elevation="10dp"/>
 
 </LinearLayout>

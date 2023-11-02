@@ -5,13 +5,15 @@
     android:padding="20dp"
     android:orientation="vertical"
     android:gravity="center_horizontal"
-    android:background="@drawable/bottom_sheet_bg">
+    android:background="@drawable/bottom_sheet_bg"
+    style="@style/bgTint">
 
     <LinearLayout
         android:layout_width="35dp"
         android:layout_height="4dp"
         android:layout_marginBottom="10dp"
-        android:background="@drawable/small_handle"/>
+        android:background="@drawable/small_handle"
+        style="@style/searchBg"/>
 
     <TextView
         android:layout_width="match_parent"
@@ -29,9 +31,9 @@
         android:text="Are you sure you want to log out?"
         android:textAlignment="center"
         android:fontFamily="@font/urbanist_bold"
-        android:textColor="#424242"
         android:textSize="20sp"
-        android:layout_marginBottom="15dp"/>
+        android:layout_marginBottom="15dp"
+        style="@style/textColorLight"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -41,12 +43,10 @@
         <Button
             android:id="@+id/cancelBtn"
             android:text="Cancel"
-            android:textColor="@color/myTheme"
             android:layout_width="wrap_content"
             android:layout_weight="1"
-            android:backgroundTint="@color/myThemeExtraLight"
             android:layout_margin="5dp"
-            style="@style/EcommButton"/>
+            style="@style/EcommButtonSecondary"/>
 
         <Button
             android:id="@+id/yesBtn"

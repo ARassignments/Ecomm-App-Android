@@ -21,50 +21,11 @@ import com.google.firebase.database.ValueEventListener;
 
 public class AdminDashboardActivity extends AppCompatActivity {
 
-    ImageView logout;
-    FirebaseAuth myAuth = FirebaseAuth.getInstance();
-    SharedPreferences preferences;
-    SharedPreferences.Editor editor;
-    FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-    DatabaseReference db = firebaseDatabase.getReference();
-    String userId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_dashboard);
-        preferences = getSharedPreferences("myData",MODE_PRIVATE);
-        editor = preferences.edit();
-        logout = findViewById(R.id.logout);
 
-        userId = preferences.getString("userId",null);
-        db.child("Users").child(userId).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.exists()){
-                    String roleCheck = snapshot.child("role").getValue().toString().trim();
-                    if(roleCheck.equals("user")){
-                        startActivity(new Intent(AdminDashboardActivity.this, DashboardActivity.class));
-                        finish();
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-
-
-        logout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                myAuth.signOut();
-                editor.clear();
-                editor.commit();
-                startActivity(new Intent(AdminDashboardActivity.this, LoginActivity.class));
-                finish();
-            }
-        });
     }
 }

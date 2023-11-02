@@ -4,19 +4,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    style="@style/searchBg"
     tools:context=".Screens.GetStartedActivity">
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:src="@drawable/welcome"
-        android:scaleType="centerCrop"/>
+        android:scaleType="centerCrop"
+        style="@style/bgTint"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:gravity="bottom">
+        android:gravity="bottom"
+        style="@style/searchBg">
 
         <TextView
             android:layout_width="match_parent"
@@ -41,9 +44,9 @@
             android:layout_height="wrap_content"
             android:text="The best plant e-commerce &amp; online store app of the century for your need!"
             android:textSize="16sp"
-            android:textColor="#424242"
             android:layout_marginHorizontal="20dp"
-            android:fontFamily="@font/urbanist_semibold"/>
+            android:fontFamily="@font/urbanist_semibold"
+            style="@style/textColorLight"/>
 
         <Button
             android:id="@+id/btnStarted"

@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".Screens.SplashScreenActivity"
     android:orientation="vertical"
+    style="@style/screenBg"
     android:gravity="center">
 
     <ImageView
