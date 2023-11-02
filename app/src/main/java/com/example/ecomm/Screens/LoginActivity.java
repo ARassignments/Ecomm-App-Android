@@ -25,6 +25,7 @@ import android.widget.Toast;
 import com.example.ecomm.MainActivity;
 import com.example.ecomm.R;
 import com.example.ecomm.Screens.Admin.AdminDashboardActivity;
+import com.example.ecomm.databinding.ActivityLoginBinding;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputEditText;
@@ -39,37 +40,23 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 public class LoginActivity extends AppCompatActivity {
-
-    ImageView backBtn;
-    TextInputLayout  emailLayout, passwordLayout;
-    TextInputEditText  emailEditText, passwordEditText;
-    Button submitBtn;
-    TextView signupBtn, forgotBtn;
-    CheckBox rememberMe;
     FirebaseAuth myAuth = FirebaseAuth.getInstance();
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     DatabaseReference db = firebaseDatabase.getReference();
+    ActivityLoginBinding binding;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
+        binding = ActivityLoginBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         sharedPreferences = getSharedPreferences("myData",MODE_PRIVATE);
         editor = sharedPreferences.edit();
-        signupBtn = findViewById(R.id.signupBtn);
-        backBtn = findViewById(R.id.backBtn);
-        emailLayout = findViewById(R.id.emailLayout);
-        passwordLayout = findViewById(R.id.passwordLayout);
-        emailEditText = findViewById(R.id.emailEditText);
-        passwordEditText = findViewById(R.id.passwordEditText);
-        submitBtn = findViewById(R.id.submitBtn);
-        rememberMe = findViewById(R.id.rememberMe);
-        forgotBtn = findViewById(R.id.forgotBtn);
-        backBtn.setOnClickListener(new View.OnClickListener() {
+        binding.backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 LoginActivity.super.onBackPressed();
@@ -80,14 +67,14 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(new Intent(LoginActivity.this, DashboardActivity.class));
             finish();
         }
-        submitBtn.setOnClickListener(new View.OnClickListener() {
+        binding.submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 validation();
             }
         });
 
-        emailEditText.addTextChangedListener(new TextWatcher() {
+        binding.emailEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -103,7 +90,7 @@ public class LoginActivity extends AppCompatActivity {
 
             }
         });
-        passwordEditText.addTextChangedListener(new TextWatcher() {
+        binding.passwordEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -119,39 +106,64 @@ public class LoginActivity extends AppCompatActivity {
 
             }
         });
-        signupBtn.setOnClickListener(new View.OnClickListener() {
+        binding.signupBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(LoginActivity.this,SignupActivity.class));
             }
         });
+        binding.facebookBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                togglerBtn(binding.facebookTxt);
+            }
+        });
+        binding.googleBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                togglerBtn(binding.googleTxt);
+            }
+        });
+        binding.appleBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                togglerBtn(binding.appleTxt);
+            }
+        });
+    }
+
+    public void togglerBtn(TextView textView){
+        binding.facebookTxt.setVisibility(View.GONE);
+        binding.googleTxt.setVisibility(View.GONE);
+        binding.appleTxt.setVisibility(View.GONE);
+        textView.setVisibility(View.VISIBLE);
     }
 
     public boolean emailValidation(){
-        String input = emailEditText.getText().toString().trim();
+        String input = binding.emailEditText.getText().toString().trim();
         String pattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
         if(input.equals("")){
-            emailLayout.setError("Email Address is Required!!!");
+            binding.emailLayout.setError("Email Address is Required!!!");
             return false;
         } else if(!input.matches(pattern)){
-            emailLayout.setError("Enter Valid Email Address!!!");
+            binding.emailLayout.setError("Enter Valid Email Address!!!");
             return false;
         } else {
-            emailLayout.setError(null);
+            binding.emailLayout.setError(null);
             return true;
         }
     }
 
     public boolean passwordValidation(){
-        String input = passwordEditText.getText().toString().trim();
+        String input = binding.passwordEditText.getText().toString().trim();
         if(input.equals("")){
-            passwordLayout.setError("Password is Required!!!");
+            binding.passwordLayout.setError("Password is Required!!!");
             return false;
         } else if(input.length() < 8){
-            passwordLayout.setError("Password at least 8 characters!!!");
+            binding.passwordLayout.setError("Password at least 8 characters!!!");
             return false;
         } else {
-            passwordLayout.setError(null);
+            binding.passwordLayout.setError(null);
             return true;
         }
     }
@@ -174,7 +186,7 @@ public class LoginActivity extends AppCompatActivity {
                 message.setText("Login...");
                 loaddialog.show();
                 // Login Here
-                myAuth.signInWithEmailAndPassword(emailEditText.getText().toString().trim(),passwordEditText.getText().toString().trim())
+                myAuth.signInWithEmailAndPassword(binding.emailEditText.getText().toString().trim(),binding.passwordEditText.getText().toString().trim())
                         .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                             @Override
                             public void onSuccess(AuthResult authResult) {
@@ -200,7 +212,7 @@ public class LoginActivity extends AppCompatActivity {
                                             String status = snapshot.child("status").getValue().toString().trim();
                                             if(status.equals("1")){
                                                 alertdialog.show();
-                                                if(rememberMe.isChecked()){
+                                                if(binding.rememberMe.isChecked()){
                                                     editor.putString("loginStatus","true");
                                                     editor.commit();
                                                 }

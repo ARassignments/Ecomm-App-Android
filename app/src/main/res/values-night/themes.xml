@@ -80,4 +80,25 @@
     <style name="appleImage">
         <item name="android:src">@drawable/apple_img</item>
     </style>
+    <style name="imageShape">
+        <item name="android:background">@drawable/image_shape_dark</item>
+    </style>
+    <style name="bgShade">
+        <item name="android:background">@drawable/shade_bg</item>
+    </style>
+    <style name="bgQuantity">
+        <item name="android:backgroundTint">#35383F</item>
+    </style>
+    <style name="btnQuantity">
+        <item name="android:tint">#fff</item>
+    </style>
+    <style name="textQuantity">
+        <item name="android:textColor">#fff</item>
+    </style>
+    <style name="stockBg">
+        <item name="android:backgroundTint">#1401B763</item>
+    </style>
+    <style name="productTitle">
+        <item name="android:textColor">#535353</item>
+    </style>
 </resources>

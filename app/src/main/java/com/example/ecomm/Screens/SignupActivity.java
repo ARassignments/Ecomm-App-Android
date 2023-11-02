@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.example.ecomm.MainActivity;
 import com.example.ecomm.R;
+import com.example.ecomm.databinding.ActivitySignupBinding;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputEditText;
@@ -38,55 +39,42 @@ import java.util.regex.Pattern;
 
 public class SignupActivity extends AppCompatActivity {
 
-    ImageView backBtn;
-    TextInputLayout nameLayout, emailLayout, passwordLayout, cpasswordLayout;
-    TextInputEditText nameEditText, emailEditText, passwordEditText, cpasswordEditText;
-    Button submitBtn;
-    TextView loginBtn;
-
     FirebaseAuth myAuth = FirebaseAuth.getInstance();
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     DatabaseReference db = firebaseDatabase.getReference();
+
+    ActivitySignupBinding binding;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        backBtn = findViewById(R.id.backBtn);
-        nameLayout = findViewById(R.id.nameLayout);
-        emailLayout = findViewById(R.id.emailLayout);
-        passwordLayout = findViewById(R.id.passwordLayout);
-        cpasswordLayout = findViewById(R.id.cpasswordLayout);
-        nameEditText = findViewById(R.id.nameEditText);
-        emailEditText = findViewById(R.id.emailEditText);
-        passwordEditText = findViewById(R.id.passwordEditText);
-        cpasswordEditText = findViewById(R.id.cpasswordEditText);
-        submitBtn = findViewById(R.id.submitBtn);
-        loginBtn = findViewById(R.id.loginBtn);
+        binding = ActivitySignupBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        backBtn.setOnClickListener(new View.OnClickListener() {
+        binding.backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 SignupActivity.super.onBackPressed();
             }
         });
 
-        loginBtn.setOnClickListener(new View.OnClickListener() {
+        binding.loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 SignupActivity.super.onBackPressed();
             }
         });
 
-        submitBtn.setOnClickListener(new View.OnClickListener() {
+        binding.submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 validation();
             }
         });
 
-        nameEditText.addTextChangedListener(new TextWatcher() {
+        binding.nameEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -102,7 +90,7 @@ public class SignupActivity extends AppCompatActivity {
 
             }
         });
-        emailEditText.addTextChangedListener(new TextWatcher() {
+        binding.emailEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -118,7 +106,7 @@ public class SignupActivity extends AppCompatActivity {
 
             }
         });
-        passwordEditText.addTextChangedListener(new TextWatcher() {
+        binding.passwordEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -134,7 +122,7 @@ public class SignupActivity extends AppCompatActivity {
 
             }
         });
-        cpasswordEditText.addTextChangedListener(new TextWatcher() {
+        binding.cpasswordEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -150,68 +138,93 @@ public class SignupActivity extends AppCompatActivity {
 
             }
         });
+        binding.facebookBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                togglerBtn(binding.facebookTxt);
+            }
+        });
+        binding.googleBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                togglerBtn(binding.googleTxt);
+            }
+        });
+        binding.appleBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                togglerBtn(binding.appleTxt);
+            }
+        });
+    }
+
+    public void togglerBtn(TextView textView){
+        binding.facebookTxt.setVisibility(View.GONE);
+        binding.googleTxt.setVisibility(View.GONE);
+        binding.appleTxt.setVisibility(View.GONE);
+        textView.setVisibility(View.VISIBLE);
     }
 
     public boolean nameValidation(){
-        String input = nameEditText.getText().toString().trim();
+        String input = binding.nameEditText.getText().toString().trim();
         if(input.equals("")){
-            nameLayout.setError("Name is Required!!!");
+            binding.nameLayout.setError("Name is Required!!!");
             return false;
         } else if(!Pattern.compile("^[a-zA-Z\\s]*$").matcher(input).matches()){
-            nameLayout.setError("Name In Only Text!!!");
+            binding.nameLayout.setError("Name In Only Text!!!");
             return false;
         } else if(input.length() < 3){
-            nameLayout.setError("Name at least 3 characters!!!");
+            binding.nameLayout.setError("Name at least 3 characters!!!");
             return false;
         } else {
-            nameLayout.setError(null);
+            binding.nameLayout.setError(null);
             return true;
         }
     }
 
     public boolean emailValidation(){
-        String input = emailEditText.getText().toString().trim();
+        String input = binding.emailEditText.getText().toString().trim();
         String pattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
         if(input.equals("")){
-            emailLayout.setError("Email Address is Required!!!");
+            binding.emailLayout.setError("Email Address is Required!!!");
             return false;
         } else if(!input.matches(pattern)){
-            emailLayout.setError("Enter Valid Email Address!!!");
+            binding.emailLayout.setError("Enter Valid Email Address!!!");
             return false;
         } else {
-            emailLayout.setError(null);
+            binding.emailLayout.setError(null);
             return true;
         }
     }
 
     public boolean passwordValidation(){
-        String input = passwordEditText.getText().toString().trim();
+        String input = binding.passwordEditText.getText().toString().trim();
         if(input.equals("")){
-            passwordLayout.setError("Password is Required!!!");
+            binding.passwordLayout.setError("Password is Required!!!");
             return false;
         } else if(input.length() < 8){
-            passwordLayout.setError("Password at least 8 characters!!!");
+            binding.passwordLayout.setError("Password at least 8 characters!!!");
             return false;
         } else {
-            passwordLayout.setError(null);
+            binding.passwordLayout.setError(null);
             return true;
         }
     }
 
     public boolean cPasswordValidation(){
-        String input = cpasswordEditText.getText().toString().trim();
-        String input2 = passwordEditText.getText().toString().trim();
+        String input = binding.cpasswordEditText.getText().toString().trim();
+        String input2 = binding.passwordEditText.getText().toString().trim();
         if(input.equals("")){
-            cpasswordLayout.setError("Confirm Password is Required!!!");
+            binding.cpasswordLayout.setError("Confirm Password is Required!!!");
             return false;
         } else if(input.length() < 8){
-            cpasswordLayout.setError("Confirm Password at least 8 characters!!!");
+            binding.cpasswordLayout.setError("Confirm Password at least 8 characters!!!");
             return false;
         } else if(!input.equals(input2)) {
-            cpasswordLayout.setError("Confirm Password is not matched!!!");
+            binding.cpasswordLayout.setError("Confirm Password is not matched!!!");
             return false;
         } else {
-            cpasswordLayout.setError(null);
+            binding.cpasswordLayout.setError(null);
             return true;
         }
     }
@@ -235,7 +248,7 @@ public class SignupActivity extends AppCompatActivity {
                 message.setText("Creating...");
                 loaddialog.show();
                 // Signup Here
-                myAuth.createUserWithEmailAndPassword(emailEditText.getText().toString().trim(),passwordEditText.getText().toString().trim())
+                myAuth.createUserWithEmailAndPassword(binding.emailEditText.getText().toString().trim(),binding.passwordEditText.getText().toString().trim())
                         .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                             @Override
                             public void onSuccess(AuthResult authResult) {
@@ -254,8 +267,8 @@ public class SignupActivity extends AppCompatActivity {
                                 FirebaseUser user = myAuth.getCurrentUser();
 
                                 HashMap<String,String> obj = new HashMap<String,String>();
-                                obj.put("name",nameEditText.getText().toString().trim());
-                                obj.put("email",emailEditText.getText().toString().trim());
+                                obj.put("name",binding.nameEditText.getText().toString().trim());
+                                obj.put("email",binding.emailEditText.getText().toString().trim());
                                 obj.put("image","");
                                 obj.put("gender","");
                                 obj.put("role","user");

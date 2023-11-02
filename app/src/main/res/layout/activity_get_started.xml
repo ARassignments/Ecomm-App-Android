@@ -4,31 +4,30 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    style="@style/searchBg"
+    style="@style/screenBg"
     tools:context=".Screens.GetStartedActivity">
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:src="@drawable/welcome"
-        android:scaleType="centerCrop"
-        style="@style/bgTint"/>
+        android:scaleType="centerCrop"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:gravity="bottom"
-        style="@style/searchBg">
+        style="@style/bgShade">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Welcome to 👋"
-            android:textColor="#212121"
             android:textSize="40sp"
+            android:fontFamily="@font/urbanist_bold"
             android:layout_marginHorizontal="20dp"
-            style="@style/Heading1"/>
+            style="@style/textColor"/>
 
         <TextView
             android:layout_width="match_parent"
