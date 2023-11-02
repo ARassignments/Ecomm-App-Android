@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".Screens.ProductDetailActivity">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="#F8F8F8">
+
+        <ImageView
+            android:id="@+id/pImage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/testimg"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:padding="20dp">
+
+            <ImageView
+                android:id="@+id/backBtn"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@drawable/back"
+                android:layout_marginRight="10dp"
+                style="@style/iconColor"/>
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:layout_weight="1"
+        style="@style/screenBg"
+        android:padding="20dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/pName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Airtight Cactus"
+                android:fontFamily="@font/urbanist_bold"
+                android:textSize="32sp"
+                style="@style/textColor"/>
+
+            <ImageView
+                android:id="@+id/wishlistBtn"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:src="@drawable/heart_outlined"
+                android:layout_marginLeft="15dp"
+                app:tint="@color/myTheme" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/pStock"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="23 Stock"
+                android:background="@drawable/product_stock_bg"
+                android:backgroundTint="@color/myThemeExtraLight"
+                android:textColor="@color/myTheme"
+                android:paddingVertical="5dp"
+                android:paddingHorizontal="10dp"
+                android:fontFamily="@font/urbanist_semibold"
+                android:textSize="10dp"/>
+
+            <ImageView
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:src="@drawable/rating_star"
+                android:layout_marginLeft="10dp"/>
+
+            <TextView
+                android:id="@+id/pRating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="4.6 (4,749 reviews)"
+                android:paddingLeft="5dp"
+                android:paddingRight="8dp"
+                android:fontFamily="@font/urbanist_medium"
+                android:textSize="14dp"
+                style="@style/textColorLight"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:background="@drawable/line_shape"
+            android:layout_marginVertical="15dp"
+            style="@style/searchBg"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Description"
+            android:fontFamily="@font/urbanist_bold"
+            android:textSize="18sp"
+            style="@style/textColor"/>
+
+        <TextView
+            android:id="@+id/pDesc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna. Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+            android:fontFamily="@font/urbanist_regular"
+            android:textSize="14sp"
+            android:layout_marginTop="10dp"
+            android:lineHeight="17dp"
+            style="@style/textColorLight"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="15dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Quantity"
+                android:fontFamily="@font/urbanist_bold"
+                android:textSize="18sp"
+                android:layout_marginRight="15dp"
+                style="@style/textColor"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:paddingVertical="5dp"
+                android:paddingHorizontal="10dp"
+                android:background="@drawable/pill_shape"
+                android:backgroundTint="#F8F8F8">
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:src="@drawable/minus"
+                    app:tint="@color/myTheme" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1"
+                    android:fontFamily="@font/urbanist_bold"
+                    android:textSize="18sp"
+                    android:layout_marginHorizontal="15dp"
+                    android:textColor="@color/myTheme"/>
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:src="@drawable/add"
+                    app:tint="@color/myTheme" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:background="@drawable/line_shape"
+            android:layout_marginVertical="15dp"
+            style="@style/searchBg"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Total price"
+                    android:fontFamily="@font/urbanist_medium"
+                    android:textSize="12sp"
+                    android:lineHeight="17dp"
+                    style="@style/textColorLight"/>
+
+                <TextView
+                    android:id="@+id/totalPrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="$0"
+                    android:fontFamily="@font/urbanist_bold"
+                    android:textSize="24sp"
+                    style="@style/textColor"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/btnAddToCart"
+                android:layout_width="wrap_content"
+                android:layout_height="58dp"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:background="@drawable/button_shape"
+                android:layout_marginLeft="20dp">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/cart"
+                    android:layout_marginRight="10dp"
+                    app:tint="@color/white" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Add to Cart"
+                    android:fontFamily="@font/urbanist_bold"
+                    android:textSize="16sp"
+                    android:textColor="@color/white"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

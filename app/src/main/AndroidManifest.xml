@@ -16,6 +16,9 @@
         android:theme="@style/Theme.Ecomm"
         tools:targetApi="31">
         <activity
+            android:name=".Screens.ProductDetailActivity"
+            android:exported="false" />
+        <activity
             android:name=".Screens.SearchActivity"
             android:exported="false" />
         <activity

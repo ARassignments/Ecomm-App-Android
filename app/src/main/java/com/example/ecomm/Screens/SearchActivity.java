@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.Editable;
@@ -211,6 +212,14 @@ public class SearchActivity extends AppCompatActivity {
             double totalPrice = Double.parseDouble(data.get(i).getpPrice()) - calcDiscount;
             pPrice.setText("$"+Math.round(totalPrice));
 
+            item.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(context, ProductDetailActivity.class);
+                    intent.putExtra("pid",data.get(i).getId());
+                    startActivity(intent);
+                }
+            });
 
             return productItem;
         }
