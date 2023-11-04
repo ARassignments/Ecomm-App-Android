@@ -19,7 +19,8 @@ public class ProductDetailActivity extends AppCompatActivity {
 
     ActivityProductDetailBinding binding;
     String PID = "";
-    int pPrice = 0, pStock = 0, pDiscount = 0 ,pQty = 1;
+
+    int pPrice = 0, pStock = 0, pQty = 1, pDiscount = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,26 +43,29 @@ public class ProductDetailActivity extends AppCompatActivity {
                     binding.pName.setText(snapshot.child("pName").getValue().toString().trim());
                     binding.pNameTitle.setText(snapshot.child("pName").getValue().toString().trim());
                     binding.pDesc.setText(snapshot.child("pDesc").getValue().toString().trim());
-                    binding.totalPrice.setText("$"+snapshot.child("pPrice").getValue().toString().trim());
-                    if(Integer.parseInt(snapshot.child("pStock").getValue().toString().trim()) > 0){
-                        binding.pStock.setText(snapshot.child("pStock").getValue().toString().trim()+" Stock");
-                    } else {
-                        binding.pStock.setText("Soled");
-                        binding.btnAddToCart.setVisibility(View.GONE);
+
+                    if(Integer.parseInt(snapshot.child("pStock").getValue().toString().trim()) < 1){
+                        binding.pStock.setText("Out Of Stock");
                         binding.qtyContainer.setVisibility(View.GONE);
+                        binding.btnAddToCart.setVisibility(View.GONE);
                         binding.totalContainer.setVisibility(View.GONE);
                         binding.btnOutOfStock.setVisibility(View.VISIBLE);
+                    } else {
+                        binding.pStock.setText(snapshot.child("pStock").getValue().toString().trim()+" Stock");
                     }
-                    if(!snapshot.child("pDiscount").getValue().toString().trim().equals("0")){
+
+                    if(Integer.parseInt(snapshot.child("pDiscount").getValue().toString().trim()) > 0){
                         binding.pDiscount.setVisibility(View.VISIBLE);
-                        binding.pDiscount.setText(snapshot.child("pDiscount").getValue().toString().trim()+"% OFF");
                         binding.pPriceOff.setVisibility(View.VISIBLE);
-                        binding.pPriceOff.setText("$"+snapshot.child("pPrice").getValue().toString().trim());
-                        double discount = Double.parseDouble(snapshot.child("pDiscount").getValue().toString().trim())/100;
-                        double calcDiscount = Double.parseDouble(snapshot.child("pPrice").getValue().toString().trim()) * discount;
-                        double totalPrice = Double.parseDouble(snapshot.child("pPrice").getValue().toString().trim()) - calcDiscount;
-                        binding.totalPrice.setText("$"+Math.round(totalPrice));
+                        binding.pDiscount.setText(snapshot.child("pDiscount").getValue().toString().trim()+"% OFF");
                     }
+
+                    binding.pQty.setText(""+pQty);
+                    double discount = Double.parseDouble(snapshot.child("pDiscount").getValue().toString().trim())/100;
+                    double calcDiscount = Double.parseDouble(snapshot.child("pPrice").getValue().toString().trim()) * discount;
+                    double totalPrice = Double.parseDouble(snapshot.child("pPrice").getValue().toString().trim()) - calcDiscount;
+                    binding.totalPrice.setText("$"+Math.round(totalPrice));
+                    binding.pPriceOff.setText("$"+ snapshot.child("pPrice").getValue().toString().trim());
                     setData(
                             snapshot.child("pPrice").getValue().toString().trim(),
                             snapshot.child("pStock").getValue().toString().trim(),
@@ -81,17 +85,18 @@ public class ProductDetailActivity extends AppCompatActivity {
                 ProductDetailActivity.super.onBackPressed();
             }
         });
-        binding.pQty.setText(""+pQty);
-        binding.qtyAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addQty();
-            }
-        });
+
         binding.qtyMinus.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                subtractQty();
+            public void onClick(View view) {
+                minusQty();
+            }
+        });
+
+        binding.qtyAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addQty();
             }
         });
     }
@@ -101,33 +106,25 @@ public class ProductDetailActivity extends AppCompatActivity {
         pDiscount = Integer.parseInt(pDiscountVal);
     }
     public void addQty(){
-        if(pQty < pStock){
+        if(pQty < pStock ){
             pQty++;
             binding.pQty.setText(""+pQty);
-            if(pDiscount > 0){
-                double discount = Double.parseDouble(""+pDiscount)/100;
-                double calcDiscount = Double.parseDouble(""+pPrice) * discount;
-                double totalPrice = Double.parseDouble(""+pPrice) - calcDiscount;
-                binding.pPriceOff.setText("$"+(pPrice*pQty));
-                binding.totalPrice.setText("$"+(Math.round(totalPrice)*pQty));
-            } else {
-                binding.totalPrice.setText("$"+(pPrice*pQty));
-            }
+            double discount = Double.parseDouble(""+pDiscount)/100;
+            double calcDiscount = Double.parseDouble(""+pPrice) * discount;
+            double totalPrice = Double.parseDouble(""+pPrice) - calcDiscount;
+            binding.totalPrice.setText("$"+(Math.round(totalPrice) * pQty));
+            binding.pPriceOff.setText("$"+(pPrice * pQty));
         }
     }
-    public void subtractQty(){
-        if(pQty > 1){
+    public void minusQty(){
+        if (pQty > 1){
             pQty--;
             binding.pQty.setText(""+pQty);
-            if(pDiscount > 0){
-                double discount = Double.parseDouble(""+pDiscount)/100;
-                double calcDiscount = Double.parseDouble(""+pPrice) * discount;
-                double totalPrice = Double.parseDouble(""+pPrice) - calcDiscount;
-                binding.pPriceOff.setText("$"+(pPrice*pQty));
-                binding.totalPrice.setText("$"+(Math.round(totalPrice)*pQty));
-            } else {
-                binding.totalPrice.setText("$"+(pPrice*pQty));
-            }
+            double discount = Double.parseDouble(""+pDiscount)/100;
+            double calcDiscount = Double.parseDouble(""+pPrice) * discount;
+            double totalPrice = Double.parseDouble(""+pPrice) - calcDiscount;
+            binding.totalPrice.setText("$"+(Math.round(totalPrice) * pQty));
+            binding.pPriceOff.setText("$"+(pPrice * pQty));
         }
     }
 }
