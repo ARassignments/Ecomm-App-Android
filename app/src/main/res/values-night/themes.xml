@@ -68,6 +68,9 @@
     <style name="screenBg">
         <item name="android:background">#181A20</item>
     </style>
+    <style name="screenBgTwo">
+        <item name="android:background">#181A20</item>
+    </style>
     <style name="bgTint">
         <item name="android:backgroundTint">#181A20</item>
     </style>
@@ -100,5 +103,30 @@
     </style>
     <style name="productTitle">
         <item name="android:textColor">#535353</item>
+    </style>
+    <style name="bottomDialogBg">
+        <item name="android:background">@drawable/bottom_dialog_bg_dark</item>
+    </style>
+    <style name="strokeBgColor">
+        <item name="android:backgroundTint">#35383F</item>
+    </style>
+    <style name="borderRadiusTop">
+        <item name="android:background">@drawable/border_radius_top_dark</item>
+    </style>
+    <style name="productCartBg">
+        <item name="android:backgroundTint">#1F222A</item>
+    </style>
+    <style name="bottomDialogBgTwo">
+        <item name="android:background">@drawable/bottom_dialog_bg_dark</item>
+    </style>
+    <style name="productCartDialogBg">
+        <item name="android:backgroundTint">#181A20</item>
+    </style>
+    <style name="tabText">
+        <item name="android:fontFamily">@font/urbanist_semibold</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">#9E9E9E</item>
+        <item name="textAllCaps">false</item>
+        <item name="android:letterSpacing">0.0</item>
     </style>
 </resources>

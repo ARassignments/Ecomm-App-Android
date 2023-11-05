@@ -155,7 +155,7 @@
                 android:layout_height="5dp"
                 android:background="@drawable/line_shape"
                 android:layout_marginVertical="15dp"
-                style="@style/searchBg"/>
+                style="@style/strokeBgColor"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -236,7 +236,7 @@
                 android:layout_height="5dp"
                 android:background="@drawable/line_shape"
                 android:layout_marginVertical="15dp"
-                style="@style/searchBg"/>
+                style="@style/strokeBgColor"/>
 
             <LinearLayout
                 android:layout_width="match_parent"

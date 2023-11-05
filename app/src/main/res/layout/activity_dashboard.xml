@@ -23,7 +23,6 @@
         app:labelVisibilityMode="auto"
         app:itemTextAppearanceActive="@style/BottomNavigationViewTextStyleActive"
         app:itemTextAppearanceInactive="@style/BottomNavigationViewTextStyle"
-        style="@style/screenBg"
-        app:elevation="10dp"/>
+        style="@style/screenBg"/>
 
 </LinearLayout>
