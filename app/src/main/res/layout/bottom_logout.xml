@@ -12,7 +12,7 @@
         android:layout_height="4dp"
         android:layout_marginBottom="10dp"
         android:background="@drawable/small_handle"
-        style="@style/searchBg"/>
+        style="@style/strokeBgColor"/>
 
     <TextView
         android:layout_width="match_parent"
