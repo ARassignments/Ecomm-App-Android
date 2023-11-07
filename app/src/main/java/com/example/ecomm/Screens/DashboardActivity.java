@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.renderscript.ScriptGroup;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -41,7 +42,7 @@ public class DashboardActivity extends AppCompatActivity {
     SharedPreferences.Editor editor;
     String userId;
     ActivityDashboardBinding binding;
-    public static BadgeDrawable badgeDrawable;
+    public static BadgeDrawable badgeCart, badgeWishlist;
     @SuppressLint("NonConstantResourceId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,9 +57,14 @@ public class DashboardActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         replaceFragment(new HomeFragment());
-        badgeDrawable = binding.bottomAppBar.getOrCreateBadge(R.id.cart);
-        badgeDrawable.setVisible(false);
-        badgeDrawable.setBackgroundColor(getResources().getColor(R.color.myThemeLight));
+        badgeCart = binding.bottomAppBar.getOrCreateBadge(R.id.cart);
+        badgeCart.setVisible(false);
+        badgeCart.setBackgroundColor(getResources().getColor(R.color.myThemeLight));
+
+        badgeWishlist = binding.bottomAppBar.getOrCreateBadge(R.id.wishlist);
+        badgeWishlist.setVisible(false);
+        badgeWishlist.setBackgroundColor(getResources().getColor(R.color.myThemeLight));
+
         binding.bottomAppBar.setOnItemSelectedListener(item -> {
             switch (item.getTitle().toString()){
                 case "Home":
@@ -98,6 +104,23 @@ public class DashboardActivity extends AppCompatActivity {
 
             }
         });
+        MainActivity.myRef.child("Wishlist").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                int favoriteCount = 0;
+                for (DataSnapshot ds : snapshot.getChildren()) {
+                    if (userId.equals(ds.child("UID").getValue())) {
+                        favoriteCount++;
+                    }
+                }
+                updateWishlistCount(favoriteCount);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.d("TAG", "onCancelled: " + error.getMessage());
+            }
+        });
     }
     public void replaceFragment(Fragment fragment){
         getSupportFragmentManager().beginTransaction().replace(R.id.frame,fragment).commit();
@@ -105,10 +128,18 @@ public class DashboardActivity extends AppCompatActivity {
 
     public static void updateCartCount(int number){
         if (number > 0) {
-            badgeDrawable.setVisible(true);
-            badgeDrawable.setNumber(number);
+            badgeCart.setVisible(true);
+            badgeCart.setNumber(number);
         } else {
-            badgeDrawable.setVisible(false);
+            badgeCart.setVisible(false);
+        }
+    }
+    public static void updateWishlistCount(int number){
+        if (number > 0) {
+            badgeWishlist.setVisible(true);
+            badgeWishlist.setNumber(number);
+        } else {
+            badgeWishlist.setVisible(false);
         }
     }
 }

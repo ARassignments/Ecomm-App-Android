@@ -83,4 +83,16 @@
 
     </LinearLayout>
 
+    <GridView
+        android:id="@+id/gridView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:horizontalSpacing="10dp"
+        android:numColumns="2"
+        android:paddingHorizontal="20dp"
+        android:verticalSpacing="10dp"
+        android:visibility="gone"
+        tools:listitem="@layout/product_listview" />
+
 </LinearLayout>

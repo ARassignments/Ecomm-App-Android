@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -14,6 +15,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,6 +37,7 @@ public class ProductDetailActivity extends AppCompatActivity {
     SharedPreferences.Editor editor;
 
     boolean foundInFvrt = false;
+    String fvrtItemId = "";
     int pPrice = 0, pStock = 0, pQty = 1, pDiscount = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,6 +100,9 @@ public class ProductDetailActivity extends AppCompatActivity {
 
             }
         });
+
+        fetchWishlist();
+
         binding.backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -118,56 +124,102 @@ public class ProductDetailActivity extends AppCompatActivity {
             }
         });
 
-       binding.wishlistBtn.setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View view) {
-               MainActivity.myRef.child("Wishlist").addListenerForSingleValueEvent(new ValueEventListener() {
-                   @Override
-                   public void onDataChange(@NonNull DataSnapshot snapshot) {
-                       if (snapshot.exists()) {
-                           for (DataSnapshot ds : snapshot.getChildren()) {
-                               if (userId.equals(ds.child("UID").getValue()) && PID.equals(ds.child("PID").getValue())) {
-                                   String fvrtItemId = ds.getKey();
-                                   foundInFvrt = true;
-                                   MainActivity.myRef.child("Wishlist").child(fvrtItemId).removeValue();
-                               }
-                           }
-                           if (!foundInFvrt) {
-                               HashMap<String, String> Obj = new HashMap<String,String>();
-                               Obj.put("UID",userId);
-                               Obj.put("PID",PID);
-                               MainActivity.myRef.child("Wishlist").push().setValue(Obj);
-                               Dialog alertdialog = new Dialog(ProductDetailActivity.this);
-                               alertdialog.setContentView(R.layout.dialog_success);
-                               alertdialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-                               alertdialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                               alertdialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-                               alertdialog.getWindow().setGravity(Gravity.CENTER);
-                               alertdialog.setCancelable(false);
-                               alertdialog.setCanceledOnTouchOutside(false);
-                               TextView message = alertdialog.findViewById(R.id.message);
-                               message.setText("Product is Added into Wishlist");
-                               alertdialog.show();
+        binding.wishlistBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                wishlistBtnClicked();
+            }
+        });
 
-                               new Handler().postDelayed(new Runnable() {
-                                   @Override
-                                   public void run() {
-                                       alertdialog.dismiss();
-                                   }
-                               },2000);
-                           }
-                       }
 
-                   }
+    }
+    public void fetchWishlist(){
+        MainActivity.myRef.child("Wishlist").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    int favoriteCount = 0;
+                    for (DataSnapshot ds : snapshot.getChildren()) {
+                        if (userId.equals(ds.child("UID").getValue()) && ds.child("PID").getValue().equals(PID)) {
+                            favoriteCount++;
+                            setWishlistId(ds.getKey());
+                        }
+                    }
 
-                   @Override
-                   public void onCancelled(@NonNull DatabaseError error) {
-                       Log.d("TAG", "onCancelled: " + error.getMessage());
-                   }
-               });
-           }
-       });
+                    if (favoriteCount > 0) {
+                        binding.wishlistBtn.setImageResource(R.drawable.heart_gradient);
+                        setWishlistStatus(true);
+                    } else {
+                        setWishlistStatus(false);
+                    }
+                } else {
+                    setWishlistStatus(false);
+                }
+            }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.d("TAG", "onCancelled: " + error.getMessage());
+            }
+        });
+    }
+    public void setWishlistStatus(Boolean status){
+        foundInFvrt = status;
+    }
+    public void setWishlistId(String Id){
+        fvrtItemId = Id;
+    }
+
+    public void wishlistBtnClicked(){
+        if(foundInFvrt == true){
+            MainActivity.myRef.child("Wishlist").child(fvrtItemId).removeValue();
+//            setWishlistStatus(false);
+            binding.wishlistBtn.setImageResource(R.drawable.heart_outlined);
+            Dialog alertdialog = new Dialog(ProductDetailActivity.this);
+            alertdialog.setContentView(R.layout.dialog_success);
+            alertdialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+            alertdialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            alertdialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+            alertdialog.getWindow().setGravity(Gravity.CENTER);
+            alertdialog.setCancelable(false);
+            alertdialog.setCanceledOnTouchOutside(false);
+            TextView message = alertdialog.findViewById(R.id.message);
+            message.setText("Product Removed From Wishlist Successfully");
+            alertdialog.show();
+
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    alertdialog.dismiss();
+                }
+            },2000);
+        } else if(foundInFvrt == false) {
+            HashMap<String, String> Obj = new HashMap<String,String>();
+            Obj.put("UID",userId);
+            Obj.put("PID",PID);
+            MainActivity.myRef.child("Wishlist").push().setValue(Obj);
+//            setWishlistStatus(true);
+//            binding.wishlistBtn.setImageResource(R.drawable.heart_gradient);
+            Dialog alertdialog = new Dialog(ProductDetailActivity.this);
+            alertdialog.setContentView(R.layout.dialog_success);
+            alertdialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+            alertdialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            alertdialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+            alertdialog.getWindow().setGravity(Gravity.CENTER);
+            alertdialog.setCancelable(false);
+            alertdialog.setCanceledOnTouchOutside(false);
+            TextView message = alertdialog.findViewById(R.id.message);
+            message.setText("Product is Added into Wishlist");
+            alertdialog.show();
+
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    alertdialog.dismiss();
+                }
+            },2000);
+        }
+        fetchWishlist();
     }
     public void setData(String pPriceVal, String pStockVal, String pDiscountVal){
         pPrice = Integer.parseInt(pPriceVal);

@@ -6,10 +6,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,10 +36,14 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 
 public class SearchActivity extends AppCompatActivity {
 
     ActivitySearchBinding binding;
+    SharedPreferences preferences;
+    SharedPreferences.Editor editor;
+    String userId = "";
     ArrayList<ProductModel> datalist = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +53,9 @@ public class SearchActivity extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         binding = ActivitySearchBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        preferences = getSharedPreferences("myData", MODE_PRIVATE);
+        editor = preferences.edit();
+        userId = preferences.getString("userId",null);
         binding.backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -159,6 +170,8 @@ public class SearchActivity extends AppCompatActivity {
         Context context;
         ArrayList<ProductModel> data;
 
+        boolean foundInFvrt = false;
+
         public MyAdapter(Context context, ArrayList<ProductModel> data) {
             this.context = context;
             this.data = data;
@@ -221,6 +234,101 @@ public class SearchActivity extends AppCompatActivity {
                 }
             });
 
+            MainActivity.myRef.child("Wishlist").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (snapshot.exists()) {
+                        int favoriteCount = 0;
+                        for (DataSnapshot ds : snapshot.getChildren()) {
+                            if (userId.equals(ds.child("UID").getValue()) && ds.child("PID").getValue().equals(data.get(i).getId())) {
+                                favoriteCount++;
+                            }
+                        }
+                        wishlistBtn.setImageResource(R.drawable.heart_outlined);
+                        if (favoriteCount > 0) {
+                            wishlistBtn.setImageResource(R.drawable.heart_gradient);
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    Log.d("TAG", "onCancelled: " + error.getMessage());
+                }
+            });
+
+            wishlistBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    MainActivity.myRef.child("Wishlist").addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if (snapshot.exists()) {
+                                for (DataSnapshot ds : snapshot.getChildren()) {
+                                    if (userId.equals(ds.child("UID").getValue()) && ds.child("PID").getValue().equals(data.get(i).getId())) {
+                                        String fvrtItemId = ds.getKey();
+                                        foundInFvrt = true;
+                                        MainActivity.myRef.child("Wishlist").child(fvrtItemId).removeValue();
+                                        wishlistBtn.setImageResource(R.drawable.heart_outlined);
+                                        Dialog alertdialog = new Dialog(context);
+                                        alertdialog.setContentView(R.layout.dialog_success);
+                                        alertdialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+                                        alertdialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                                        alertdialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+                                        alertdialog.getWindow().setGravity(Gravity.CENTER);
+                                        alertdialog.setCancelable(false);
+                                        alertdialog.setCanceledOnTouchOutside(false);
+                                        TextView message = alertdialog.findViewById(R.id.message);
+                                        message.setText("Product Removed From Wishlist Successfully");
+                                        alertdialog.show();
+
+                                        new Handler().postDelayed(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                alertdialog.dismiss();
+                                            }
+                                        },2000);
+
+                                        break;
+                                    }
+                                }
+                            }
+
+                            if (!foundInFvrt) {
+                                HashMap<String, String> Obj = new HashMap<String,String>();
+                                Obj.put("UID",userId);
+                                Obj.put("PID",data.get(i).getId());
+                                MainActivity.myRef.child("Wishlist").push().setValue(Obj);
+                                wishlistBtn.setImageResource(R.drawable.heart_gradient);
+                                Dialog alertdialog = new Dialog(context);
+                                alertdialog.setContentView(R.layout.dialog_success);
+                                alertdialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+                                alertdialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                                alertdialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+                                alertdialog.getWindow().setGravity(Gravity.CENTER);
+                                alertdialog.setCancelable(false);
+                                alertdialog.setCanceledOnTouchOutside(false);
+                                TextView message = alertdialog.findViewById(R.id.message);
+                                message.setText("Product is Added into Wishlist");
+                                alertdialog.show();
+
+                                new Handler().postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        alertdialog.dismiss();
+                                    }
+                                },2000);
+
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                            Log.d("TAG", "onCancelled: " + error.getMessage());
+                        }
+                    });
+                }
+            });
             return productItem;
         }
     }
