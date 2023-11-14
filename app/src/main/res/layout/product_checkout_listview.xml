@@ -4,8 +4,7 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:paddingTop="10dp"
-    android:paddingBottom="10dp"
-    android:paddingHorizontal="20dp">
+    android:paddingBottom="10dp">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -126,12 +125,13 @@
                         android:background="@drawable/pill_shape"
                         style="@style/bgQuantity">
 
-                        <ImageView
-                            android:id="@+id/qtyMinus"
-                            android:layout_width="15dp"
-                            android:layout_height="15dp"
-                            android:src="@drawable/minus"
-                            style="@style/btnQuantity"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Qty: "
+                            android:fontFamily="@font/urbanist_bold"
+                            android:textSize="15sp"
+                            style="@style/textQuantity"/>
 
                         <TextView
                             android:id="@+id/pQty"
@@ -140,29 +140,10 @@
                             android:text="0"
                             android:fontFamily="@font/urbanist_bold"
                             android:textSize="15sp"
-                            android:layout_marginHorizontal="10dp"
                             style="@style/textQuantity"/>
-
-                        <ImageView
-                            android:id="@+id/qtyAdd"
-                            android:layout_width="15dp"
-                            android:layout_height="15dp"
-                            android:src="@drawable/add"
-                            style="@style/btnQuantity"/>
 
                     </LinearLayout>
 
-                    <Space
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"/>
-
-                    <ImageView
-                        android:id="@+id/delete"
-                        android:layout_width="23dp"
-                        android:layout_height="23dp"
-                        android:src="@drawable/delete_outlined"
-                        style="@style/iconColor"/>
 
                 </LinearLayout>
 

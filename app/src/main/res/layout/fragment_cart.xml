@@ -35,6 +35,7 @@
             android:layout_height="25dp"
             android:src="@drawable/search"
             android:layout_marginRight="15dp"
+            android:visibility="gone"
             style="@style/iconColor"/>
 
     </LinearLayout>
@@ -47,7 +48,7 @@
         android:orientation="vertical"
         android:layout_marginHorizontal="20dp"
         android:gravity="center"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <ImageView
             android:layout_width="match_parent"
@@ -99,6 +100,7 @@
             android:layout_weight="1"
             android:dividerHeight="0dp"
             android:divider="@null"
+            android:scrollbars="none"
             tools:listitem="@layout/product_cart_listview"/>
 
         <LinearLayout

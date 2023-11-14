@@ -59,6 +59,21 @@
                     android:scaleType="fitCenter"
                     android:backgroundTint="@color/transparent"/>
 
+                <TextView
+                    android:id="@+id/pDiscount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="50% OFF"
+                    android:layout_margin="9dp"
+                    android:background="@drawable/pill_shape"
+                    android:backgroundTint="#CD2E2E"
+                    android:textColor="@color/white"
+                    android:paddingVertical="3dp"
+                    android:paddingHorizontal="5dp"
+                    android:fontFamily="@font/urbanist_bold"
+                    android:visibility="gone"
+                    android:textSize="10sp"/>
+
             </FrameLayout>
 
             <LinearLayout
@@ -83,6 +98,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
+                    android:layout_marginVertical="5dp"
                     android:gravity="center_vertical">
 
                     <TextView
@@ -103,6 +119,7 @@
                         android:fontFamily="@font/urbanist_bold"
                         android:textColor="#9F9F9F"
                         android:textSize="13sp"
+                        android:visibility="gone"
                         android:layout_marginVertical="5dp"
                         android:background="@drawable/line"
                         android:backgroundTint="#9F9F9F"/>

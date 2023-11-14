@@ -46,7 +46,8 @@
         android:layout_weight="1"
         android:orientation="vertical"
         android:layout_marginHorizontal="20dp"
-        android:gravity="center">
+        android:gravity="center"
+        android:visibility="gone">
 
         <ImageView
             android:layout_width="match_parent"
@@ -93,6 +94,7 @@
         android:paddingHorizontal="20dp"
         android:verticalSpacing="10dp"
         android:visibility="gone"
+        android:scrollbars="none"
         tools:listitem="@layout/product_listview" />
 
 </LinearLayout>

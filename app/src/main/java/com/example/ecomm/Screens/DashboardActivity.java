@@ -121,6 +121,23 @@ public class DashboardActivity extends AppCompatActivity {
                 Log.d("TAG", "onCancelled: " + error.getMessage());
             }
         });
+        MainActivity.myRef.child("AddToCart").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                int cartCount = 0;
+                for (DataSnapshot ds : snapshot.getChildren()) {
+                    if (userId.equals(ds.child("UID").getValue())) {
+                        cartCount++;
+                    }
+                }
+                updateCartCount(cartCount);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.d("TAG", "onCancelled: " + error.getMessage());
+            }
+        });
     }
     public void replaceFragment(Fragment fragment){
         getSupportFragmentManager().beginTransaction().replace(R.id.frame,fragment).commit();

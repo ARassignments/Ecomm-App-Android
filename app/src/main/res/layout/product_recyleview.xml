@@ -9,16 +9,25 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="130dp"
-        android:layout_marginTop="5dp"
-        android:background="@drawable/product_card_bg"
-        style="@style/productBgColor">
+        android:layout_marginTop="5dp">
 
-        <ImageView
-            android:id="@+id/pImage"
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/testimg"
-            android:scaleType="fitCenter"/>
+            app:cardCornerRadius="20dp"
+            app:cardElevation="0dp"
+            android:background="@drawable/product_card_bg"
+            style="@style/productBgColor">
+
+            <ImageView
+                android:id="@+id/pImage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/testimg"
+                android:scaleType="fitCenter"
+                android:backgroundTint="@color/transparent"/>
+
+        </androidx.cardview.widget.CardView>
 
         <ImageView
             android:id="@+id/wishlistBtn"

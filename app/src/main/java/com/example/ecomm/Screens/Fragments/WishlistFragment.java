@@ -19,6 +19,9 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -182,8 +185,29 @@ public class WishlistFragment extends Fragment {
                 @Override
                 public void onClick(View view) {
                     MainActivity.myRef.child("Wishlist").child(data.get(i).getId()).removeValue();
+                    Dialog alertdialog = new Dialog(context);
+                    alertdialog.setContentView(R.layout.dialog_success);
+                    alertdialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+                    alertdialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    alertdialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+                    alertdialog.getWindow().setGravity(Gravity.CENTER);
+                    alertdialog.setCancelable(false);
+                    alertdialog.setCanceledOnTouchOutside(false);
+                    TextView message = alertdialog.findViewById(R.id.message);
+                    message.setText("Product Removed From Wishlist Successfully");
+                    alertdialog.show();
+
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            alertdialog.dismiss();
+                        }
+                    },2000);
                 }
             });
+            Animation anim = AnimationUtils.loadAnimation(context,R.anim.fadein);
+            productItem.startAnimation(anim);
+            anim.setStartOffset(i*20);
             return productItem;
         }
     }

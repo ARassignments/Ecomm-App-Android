@@ -101,6 +101,40 @@ public class ProductDetailActivity extends AppCompatActivity {
             }
         });
 
+        MainActivity.myRef.child("AddToCart").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot ds : snapshot.getChildren()) {
+                    if (userId.equals(ds.child("UID").getValue()) && ds.child("PID").getValue().equals(PID)) {
+                        setQty(ds.child("qty").getValue().toString().trim());
+                        MainActivity.myRef.child("Products").child(ds.child("PID").getValue().toString().trim()).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot datasnapshot) {
+                                if(datasnapshot.exists()){
+                                    double discount = Double.parseDouble(datasnapshot.child("pDiscount").getValue().toString())/100;
+                                    double calcDiscount = Double.parseDouble(datasnapshot.child("pPrice").getValue().toString().trim()) * discount;
+                                    double totalPrice = Double.parseDouble(datasnapshot.child("pPrice").getValue().toString().trim()) - calcDiscount;
+                                    int total = ((int) Math.round(totalPrice)*Integer.parseInt(ds.child("qty").getValue().toString().trim()));
+                                    binding.totalPrice.setText("$"+total);
+                                    binding.pPriceOff.setText("$"+(Integer.parseInt(datasnapshot.child("pPrice").getValue().toString().trim()) * Integer.parseInt(ds.child("qty").getValue().toString().trim())));
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        });
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.d("TAG", "onCancelled: " + error.getMessage());
+            }
+        });
+
         binding.btnAddToCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -139,6 +173,10 @@ public class ProductDetailActivity extends AppCompatActivity {
         });
 
 
+    }
+    public void setQty(String qty){
+        pQty = Integer.parseInt(qty);
+        binding.pQty.setText(""+pQty);
     }
     public void fetchWishlist(){
         MainActivity.myRef.child("Wishlist").addListenerForSingleValueEvent(new ValueEventListener() {
@@ -255,31 +293,70 @@ public class ProductDetailActivity extends AppCompatActivity {
             binding.pPriceOff.setText("$"+(pPrice * pQty));
         }
     }
-
     public void addToCart(){
-        HashMap<String,String> Obj = new HashMap<String, String>();
-        Obj.put("PID",PID);
-        Obj.put("UID",userId);
-        Obj.put("qty",binding.pQty.getText().toString().trim());
-        MainActivity.myRef.child("AddToCart").push().setValue(Obj);
-        Dialog alertdialog = new Dialog(ProductDetailActivity.this);
-        alertdialog.setContentView(R.layout.dialog_success);
-        alertdialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-        alertdialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        alertdialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-        alertdialog.getWindow().setGravity(Gravity.CENTER);
-        alertdialog.setCancelable(false);
-        alertdialog.setCanceledOnTouchOutside(false);
-        TextView message = alertdialog.findViewById(R.id.message);
-        message.setText("Product Added into Cart Successfully");
-        alertdialog.show();
-
-        new Handler().postDelayed(new Runnable() {
+        MainActivity.myRef.child("AddToCart").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void run() {
-                alertdialog.dismiss();
-            }
-        },2000);
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                int cartCount = 0;
+                String cartId = "";
+                for (DataSnapshot ds : snapshot.getChildren()) {
+                    if (userId.equals(ds.child("UID").getValue()) && ds.child("PID").getValue().equals(PID)) {
+                        cartCount++;
+                        cartId = ds.getKey();
+                    }
+                }
 
+                if (cartCount > 0) {
+                    MainActivity.myRef.child("AddToCart").child(cartId).child("qty").setValue(binding.pQty.getText().toString().trim());
+                    Dialog alertdialog = new Dialog(ProductDetailActivity.this);
+                    alertdialog.setContentView(R.layout.dialog_success);
+                    alertdialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+                    alertdialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    alertdialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+                    alertdialog.getWindow().setGravity(Gravity.CENTER);
+                    alertdialog.setCancelable(false);
+                    alertdialog.setCanceledOnTouchOutside(false);
+                    TextView message = alertdialog.findViewById(R.id.message);
+                    message.setText("Product Quantity Updated into Cart Successfully");
+                    alertdialog.show();
+
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            alertdialog.dismiss();
+                        }
+                    },2000);
+                } else {
+                    HashMap<String,String> Obj = new HashMap<String, String>();
+                    Obj.put("PID",PID);
+                    Obj.put("UID",userId);
+                    Obj.put("qty",binding.pQty.getText().toString().trim());
+                    MainActivity.myRef.child("AddToCart").push().setValue(Obj);
+                    Dialog alertdialog = new Dialog(ProductDetailActivity.this);
+                    alertdialog.setContentView(R.layout.dialog_success);
+                    alertdialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+                    alertdialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    alertdialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+                    alertdialog.getWindow().setGravity(Gravity.CENTER);
+                    alertdialog.setCancelable(false);
+                    alertdialog.setCanceledOnTouchOutside(false);
+                    TextView message = alertdialog.findViewById(R.id.message);
+                    message.setText("Product Added into Cart Successfully");
+                    alertdialog.show();
+
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            alertdialog.dismiss();
+                        }
+                    },2000);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.d("TAG", "onCancelled: " + error.getMessage());
+            }
+        });
     }
 }
