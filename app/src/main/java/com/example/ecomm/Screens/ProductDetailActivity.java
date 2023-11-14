@@ -101,6 +101,13 @@ public class ProductDetailActivity extends AppCompatActivity {
             }
         });
 
+        binding.btnAddToCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addToCart();
+            }
+        });
+
         fetchWishlist();
 
         binding.backBtn.setOnClickListener(new View.OnClickListener() {
@@ -247,5 +254,32 @@ public class ProductDetailActivity extends AppCompatActivity {
             binding.totalPrice.setText("$"+(Math.round(totalPrice) * pQty));
             binding.pPriceOff.setText("$"+(pPrice * pQty));
         }
+    }
+
+    public void addToCart(){
+        HashMap<String,String> Obj = new HashMap<String, String>();
+        Obj.put("PID",PID);
+        Obj.put("UID",userId);
+        Obj.put("qty",binding.pQty.getText().toString().trim());
+        MainActivity.myRef.child("AddToCart").push().setValue(Obj);
+        Dialog alertdialog = new Dialog(ProductDetailActivity.this);
+        alertdialog.setContentView(R.layout.dialog_success);
+        alertdialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        alertdialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        alertdialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+        alertdialog.getWindow().setGravity(Gravity.CENTER);
+        alertdialog.setCancelable(false);
+        alertdialog.setCanceledOnTouchOutside(false);
+        TextView message = alertdialog.findViewById(R.id.message);
+        message.setText("Product Added into Cart Successfully");
+        alertdialog.show();
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                alertdialog.dismiss();
+            }
+        },2000);
+
     }
 }
