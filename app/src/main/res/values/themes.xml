@@ -130,5 +130,8 @@
         <item name="textAllCaps">false</item>
         <item name="android:letterSpacing">0.0</item>
     </style>
+    <style name="mapImage">
+        <item name="android:src">@drawable/map_img</item>
+    </style>
 
 </resources>

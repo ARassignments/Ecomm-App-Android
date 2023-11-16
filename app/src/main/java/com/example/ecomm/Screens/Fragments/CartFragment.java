@@ -335,9 +335,9 @@ public class CartFragment extends Fragment {
                 }
             });
 
-            Animation anim = AnimationUtils.loadAnimation(context,R.anim.fadein);
-            itemView.startAnimation(anim);
-            anim.setStartOffset(i*20);
+//            Animation anim = AnimationUtils.loadAnimation(context,R.anim.fadein);
+//            itemView.startAnimation(anim);
+//            anim.setStartOffset(i*20);
 
             return itemView;
         }

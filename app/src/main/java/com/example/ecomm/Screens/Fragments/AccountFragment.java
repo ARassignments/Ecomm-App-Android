@@ -30,6 +30,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.ecomm.MainActivity;
 import com.example.ecomm.R;
+import com.example.ecomm.Screens.AddressActivity;
 import com.example.ecomm.Screens.LoginActivity;
 import com.example.ecomm.Screens.ProductsActivity;
 import com.example.ecomm.Screens.SignupActivity;
@@ -185,6 +186,13 @@ public class AccountFragment extends Fragment {
 
                     }
                 });
+            }
+        });
+
+        binding.addressBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(container.getContext(), AddressActivity.class));
             }
         });
         return binding.getRoot();
