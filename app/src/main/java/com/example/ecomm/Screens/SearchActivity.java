@@ -24,11 +24,13 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.ecomm.MainActivity;
 import com.example.ecomm.R;
 import com.example.ecomm.Screens.Models.ProductModel;
+import com.example.ecomm.Screens.Models.WishlistModel;
 import com.example.ecomm.databinding.ActivitySearchBinding;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -234,28 +236,38 @@ public class SearchActivity extends AppCompatActivity {
                 }
             });
 
-            MainActivity.myRef.child("Wishlist").addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    if (snapshot.exists()) {
-                        int favoriteCount = 0;
-                        for (DataSnapshot ds : snapshot.getChildren()) {
-                            if (userId.equals(ds.child("UID").getValue()) && ds.child("PID").getValue().equals(data.get(i).getId())) {
-                                favoriteCount++;
+            if (userId != null && !userId.equals("")) {
+                try {
+                    MainActivity.myRef.child("Wishlist").addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if (snapshot.exists()) {
+                                int favoriteCount = 0;
+                                for (DataSnapshot ds : snapshot.getChildren()) {
+                                    WishlistModel model = ds.getValue(WishlistModel.class);
+                                    if(data.size()>0){
+                                        if (model.getUID().equals(userId) && model.getPID().equals(data.get(i).getId())) {
+                                            favoriteCount++;
+                                        }
+                                    }
+                                }
+                                wishlistBtn.setImageResource(R.drawable.heart_outlined);
+                                if (favoriteCount > 0) {
+                                    wishlistBtn.setImageResource(R.drawable.heart_gradient);
+                                }
                             }
                         }
-                        wishlistBtn.setImageResource(R.drawable.heart_outlined);
-                        if (favoriteCount > 0) {
-                            wishlistBtn.setImageResource(R.drawable.heart_gradient);
-                        }
-                    }
-                }
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-                    Log.d("TAG", "onCancelled: " + error.getMessage());
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                            Log.d("TAG", "onCancelled: " + error.getMessage());
+                        }
+                    });
+
+                } catch (Exception e){
+
                 }
-            });
+            }
 
             wishlistBtn.setOnClickListener(new View.OnClickListener() {
                 @Override

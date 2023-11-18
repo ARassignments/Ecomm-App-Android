@@ -41,11 +41,13 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:dividerHeight="0dp"
-        android:divider="@null"/>
+        android:divider="@null"
+        android:scrollbars="none"
+        tools:listitem="@layout/address_listview"/>
 
     <LinearLayout
         android:id="@+id/btnNewAddress"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="58dp"
         android:gravity="center"
         android:orientation="horizontal"

@@ -272,6 +272,7 @@ public class SignupActivity extends AppCompatActivity {
                                 obj.put("image","");
                                 obj.put("gender","");
                                 obj.put("role","user");
+                                obj.put("address","");
                                 obj.put("createdOn",currentDate);
                                 obj.put("status","1");
 

@@ -132,4 +132,10 @@
     <style name="mapImage">
         <item name="android:src">@drawable/map_img_dark</item>
     </style>
+    <style name="inputBg">
+        <item name="android:backgroundTint">#1F222A</item>
+    </style>
+    <style name="inputTextColor">
+        <item name="android:textColor">#FFFFFF</item>
+    </style>
 </resources>
