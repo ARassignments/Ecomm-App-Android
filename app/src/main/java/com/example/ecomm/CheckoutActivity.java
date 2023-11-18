@@ -3,6 +3,7 @@ package com.example.ecomm;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.ecomm.Screens.Fragments.CartFragment;
+import com.example.ecomm.Screens.SelectAddressActivity;
 import com.example.ecomm.databinding.ActivityCheckoutBinding;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -39,6 +41,36 @@ public class CheckoutActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 CheckoutActivity.super.onBackPressed();
+            }
+        });
+
+        binding.locationEditBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(CheckoutActivity.this, SelectAddressActivity.class));
+            }
+        });
+        MainActivity.myRef.child("Users").child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                String AddressIdFromUser = snapshot.child("address").getValue().toString().trim();
+                MainActivity.myRef.child("Address").child(AddressIdFromUser).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot datasnapshot) {
+                        binding.locationName.setText(datasnapshot.child("name").getValue().toString().trim());
+                        binding.locationAddress.setText(datasnapshot.child("address").getValue().toString().trim());
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
             }
         });
         MainActivity.myRef.child("AddToCart").addListenerForSingleValueEvent(new ValueEventListener() {

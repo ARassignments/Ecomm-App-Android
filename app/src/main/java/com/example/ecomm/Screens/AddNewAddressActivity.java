@@ -221,35 +221,66 @@ public class AddNewAddressActivity extends AppCompatActivity {
             addressNameErr = addressNameValidation();
             addressDetailErr = addressDetailValidation();
             if((addressNameErr && addressDetailErr) == true){
-                String uploadId = MainActivity.myRef.child("Address").push().getKey();
-                HashMap<String,String> Obj = new HashMap<String,String>();
-                Obj.put("name",binding.nameEditText.getText().toString().trim());
-                Obj.put("address",binding.addressEditText.getText().toString().trim());
-                Obj.put("UID",userId);
-                Obj.put("defaultStatus","");
-                if(binding.defaultAddressCheckBox.isChecked()){
-                    Obj.put("defaultStatus","true");
-                    MainActivity.myRef.child("Users").child(userId).child("address").setValue(uploadId);
-                }
-                MainActivity.myRef.child("Address").child(uploadId).setValue(Obj);
-                Dialog loaddialog = new Dialog(AddNewAddressActivity.this);
-                loaddialog.setContentView(R.layout.dialog_success);
-                loaddialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-                loaddialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-                loaddialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-                loaddialog.getWindow().setGravity(Gravity.CENTER);
-                loaddialog.setCancelable(false);
-                loaddialog.setCanceledOnTouchOutside(false);
-                TextView message = loaddialog.findViewById(R.id.message);
-                message.setText("Address Added Successfully!!!");
-                loaddialog.show();
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        loaddialog.dismiss();
-                        AddNewAddressActivity.super.onBackPressed();
+                if(forEdit.equals("true")){
+                    MainActivity.myRef.child("Address").child(addressId).child("name").setValue(binding.nameEditText.getText().toString().trim());
+                    MainActivity.myRef.child("Address").child(addressId).child("address").setValue(binding.addressEditText.getText().toString().trim());
+                    if(binding.defaultAddressCheckBox.isChecked()){
+                        MainActivity.myRef.child("Address").child(addressId).child("defaultStatus").setValue("true");
+                        MainActivity.myRef.child("Users").child(userId).child("address").setValue(addressId);
+                    } else {
+                        MainActivity.myRef.child("Address").child(addressId).child("defaultStatus").setValue("");
+                        MainActivity.myRef.child("Users").child(userId).child("address").setValue("");
                     }
-                },2000);
+                    Dialog loaddialog = new Dialog(AddNewAddressActivity.this);
+                    loaddialog.setContentView(R.layout.dialog_success);
+                    loaddialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+                    loaddialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                    loaddialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+                    loaddialog.getWindow().setGravity(Gravity.CENTER);
+                    loaddialog.setCancelable(false);
+                    loaddialog.setCanceledOnTouchOutside(false);
+                    TextView message = loaddialog.findViewById(R.id.message);
+                    message.setText("Address Edited Successfully!!!");
+                    loaddialog.show();
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            loaddialog.dismiss();
+                            AddNewAddressActivity.super.onBackPressed();
+                        }
+                    },2000);
+                } else {
+                    String uploadId = MainActivity.myRef.child("Address").push().getKey();
+                    HashMap<String,String> Obj = new HashMap<String,String>();
+                    Obj.put("name",binding.nameEditText.getText().toString().trim());
+                    Obj.put("address",binding.addressEditText.getText().toString().trim());
+                    Obj.put("UID",userId);
+                    Obj.put("defaultStatus","");
+                    if(binding.defaultAddressCheckBox.isChecked()){
+                        Obj.put("defaultStatus","true");
+                        MainActivity.myRef.child("Users").child(userId).child("address").setValue(uploadId);
+                    }
+                    MainActivity.myRef.child("Address").child(uploadId).setValue(Obj);
+                    Dialog loaddialog = new Dialog(AddNewAddressActivity.this);
+                    loaddialog.setContentView(R.layout.dialog_success);
+                    loaddialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+                    loaddialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                    loaddialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+                    loaddialog.getWindow().setGravity(Gravity.CENTER);
+                    loaddialog.setCancelable(false);
+                    loaddialog.setCanceledOnTouchOutside(false);
+                    TextView message = loaddialog.findViewById(R.id.message);
+                    message.setText("Address Added Successfully!!!");
+                    loaddialog.show();
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            loaddialog.dismiss();
+                            AddNewAddressActivity.super.onBackPressed();
+                        }
+                    },2000);
+                }
+
             }
         }
     }
