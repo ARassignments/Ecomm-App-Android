@@ -171,12 +171,12 @@
                 style="@style/textColor"/>
 
             <LinearLayout
+                android:id="@+id/chooseShippingBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="center"
                 android:background="@drawable/search_bg"
-                android:layout_marginBottom="10dp"
                 android:paddingVertical="20dp"
                 android:paddingHorizontal="20dp"
                 style="@style/productCartBg"
@@ -208,15 +208,17 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/shippingContainer"
                 style="@style/productCartBg"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
+                android:layout_marginVertical="10dp"
                 android:background="@drawable/search_bg"
                 android:gravity="center"
                 android:orientation="horizontal"
                 android:paddingHorizontal="20dp"
-                android:paddingVertical="20dp">
+                android:paddingVertical="20dp"
+                android:visibility="gone">
 
                 <LinearLayout
                     android:layout_width="50dp"
@@ -380,7 +382,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:fontFamily="@font/urbanist_semibold"
-                        android:text="$0"
+                        android:text="-"
                         android:textAlignment="textEnd"
                         android:textSize="16sp" />
 
@@ -408,7 +410,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:fontFamily="@font/urbanist_semibold"
-                        android:text="$0"
+                        android:text="-"
                         android:textAlignment="textEnd"
                         android:textSize="16sp" />
 
@@ -419,7 +421,8 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:gravity="center"
-                    android:layout_marginTop="10dp">
+                    android:layout_marginTop="10dp"
+                    android:visibility="gone">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -436,7 +439,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:fontFamily="@font/urbanist_semibold"
-                        android:text="$0"
+                        android:text="-"
                         android:textAlignment="textEnd"
                         android:textSize="16sp"
                         android:textColor="@color/myTheme"/>
@@ -472,7 +475,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:fontFamily="@font/urbanist_semibold"
-                        android:text="$0"
+                        android:text="-"
                         android:textAlignment="textEnd"
                         android:textSize="16sp" />
 

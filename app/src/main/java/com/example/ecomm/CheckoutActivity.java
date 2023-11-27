@@ -50,22 +50,53 @@ public class CheckoutActivity extends AppCompatActivity {
                 startActivity(new Intent(CheckoutActivity.this, SelectAddressActivity.class));
             }
         });
-        MainActivity.myRef.child("Users").child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
+        MainActivity.myRef.child("Users").child(userId).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 String AddressIdFromUser = snapshot.child("address").getValue().toString().trim();
-                MainActivity.myRef.child("Address").child(AddressIdFromUser).addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot datasnapshot) {
-                        binding.locationName.setText(datasnapshot.child("name").getValue().toString().trim());
-                        binding.locationAddress.setText(datasnapshot.child("address").getValue().toString().trim());
-                    }
+                if(snapshot.child("shipping").getValue().toString().trim().equals("")){
+                    binding.chooseShippingBtn.setVisibility(View.VISIBLE);
+                    binding.shippingContainer.setVisibility(View.GONE);
+                } else {
+                    binding.chooseShippingBtn.setVisibility(View.GONE);
+                    binding.shippingContainer.setVisibility(View.VISIBLE);
+                }
+                if(AddressIdFromUser.equals("")){
+                    MainActivity.myRef.child("Address").addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            int addressCount = 0;
+                            for(DataSnapshot ds: snapshot.getChildren()){
+                                if(ds.child("UID").getValue().toString().trim().equals(userId)){
+                                    if(addressCount == 0){
+                                        binding.locationName.setText(ds.child("name").getValue().toString().trim());
+                                        binding.locationAddress.setText(ds.child("address").getValue().toString().trim());
+                                    }
+                                    addressCount++;
+                                }
+                            }
+                        }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
 
-                    }
-                });
+                        }
+                    });
+                } else {
+                    MainActivity.myRef.child("Address").child(AddressIdFromUser).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot datasnapshot) {
+                            binding.locationName.setText(datasnapshot.child("name").getValue().toString().trim());
+                            binding.locationAddress.setText(datasnapshot.child("address").getValue().toString().trim());
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+                }
+
             }
 
             @Override

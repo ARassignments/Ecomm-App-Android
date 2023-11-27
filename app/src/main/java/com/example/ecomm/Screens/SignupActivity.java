@@ -273,6 +273,7 @@ public class SignupActivity extends AppCompatActivity {
                                 obj.put("gender","");
                                 obj.put("role","user");
                                 obj.put("address","");
+                                obj.put("shipping","");
                                 obj.put("createdOn",currentDate);
                                 obj.put("status","1");
 

@@ -139,5 +139,11 @@
     <style name="inputTextColor">
         <item name="android:textColor">#212121</item>
     </style>
+    <style name="addressBgChoice">
+        <item name="android:background">@drawable/list_bg</item>
+    </style>
+    <style name="addressBgChoiceSelected">
+        <item name="android:background">@drawable/checked_list_bg</item>
+    </style>
 
 </resources>
